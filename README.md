@@ -1,5 +1,5 @@
 # AES-Encryption
 
 # Authors
--Fahad Ansar
--Paramvir Singh
+- Fahad Ansar
+- Paramvir Singh
