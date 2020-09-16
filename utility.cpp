@@ -60,3 +60,37 @@ unsigned int ** mtrx_xor(unsigned int** a, unsigned int** b){
     return result;
 
 }
+
+unsigned int * col_xor(unsigned int* a, unsigned int* b){
+
+    unsigned int * result = (unsigned int*)malloc(sizeof(unsigned int)*4);
+
+    for (int i = 0; i < 4; ++i) {
+        result[i] = a[i] ^ b[i];
+    }
+    return result;
+
+}
+
+unsigned int * get_col(unsigned int ** state,int col_number){
+
+    unsigned int * col = (unsigned int *)malloc(sizeof(unsigned int)*4);
+
+    for (int i = 0; i < 4; ++i) {
+        col[i] = state[i][col_number];
+    }
+
+    return col;
+
+}
+
+void set_col(unsigned int ** &state, unsigned int * source_col, int col_number){
+
+    for (int i = 0; i < 4; ++i) {
+//        if(col_number==0)
+//        std::cout << i << "," << col_number << " " << std::hex << source_col[i] << std::endl;
+        state[i][col_number] = source_col[i];
+    }
+
+
+}
