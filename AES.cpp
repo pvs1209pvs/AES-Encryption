@@ -20,11 +20,16 @@ AES::AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m)
 
 }
 
+AES::AES(unsigned int **k, const std::vector<unsigned int> &m) : key(k), key_schedule(){
+    key_schedule.push_back(k);
+}
+
+
 AES::~AES() {
-    for (int i = 0; i < 4; ++i) {
-        free(key[i]);
-        free(msg[i]);
-    }
+//    for (int i = 0; i < 4; ++i) {
+//        free(key[i]);
+//        free(msg[i]);
+//    }
 }
 
 
@@ -66,6 +71,10 @@ void AES::sub_bytes(unsigned int *&col) {
     }
 }
 
-std::vector<unsigned int **> AES::key_expansion() {
-    return std::vector<unsigned int **>();
+void AES::key_expansion() {
+    for (int i = 0; i < 10; ++i) {
+        key_schedule.push_back(key_gen(key_schedule.at(i), i));
+    }
 }
+
+

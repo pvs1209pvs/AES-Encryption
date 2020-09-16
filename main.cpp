@@ -3,18 +3,12 @@
 #include <sstream>
 #include "utility.h"
 #include "AES.h"
-#include "Table.h"
 
 int main() {
-
-//    std::cout << std::hex << (0x7eu ^ 0x84u) << std::endl;
-//    std::cout << std::endl;
 
     const std::string PLAIN_TEXT = "javajavajavajava";
     const std::vector<unsigned int> USER_KEY{PLAIN_TEXT.begin(), PLAIN_TEXT.end()};
     const std::vector<unsigned int> USER_MSG = fread("../message.txt");
-
-    AES aes{USER_KEY, USER_MSG};
 
     unsigned int dummy_key[4][4] = {
             {0x2b, 0x28, 0xab, 0x09},
@@ -34,19 +28,13 @@ int main() {
         }
     }
 
-    unsigned int ** round_key = aes.key_gen(key, 0);
+    AES aes{key, USER_MSG};
+    aes.key_expansion();
 
-    //aes.key_schedule.push_back(aes.key_gen(key, ))
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
-            std::cout << std::hex << round_key[i][j] << " ";
-        }
-        std::cout << std::endl;
+    for (int i = 1; i < 11; ++i) {
+        std::cout << "Round " << i-1 << std::endl;
+        std::cout << console_printer(aes.key_schedule.at(i)) << std::endl;
     }
-
-
-
-
 
     return 0;
 }

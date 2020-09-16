@@ -14,3 +14,5 @@ unsigned int * col_xor(unsigned int* a, unsigned int* b);
 
 unsigned int * get_col(unsigned int ** state, int col_number);
 void set_col(unsigned int ** &state, unsigned int * source_col, int col_number);
+
+std::string console_printer( unsigned int ** &input);
