@@ -1,10 +1,10 @@
 #include <iostream>
 #include <algorithm>
-#include <sstream>
 #include "utility.h"
 #include "AES.h"
 
 int main() {
+
 
     const std::string PLAIN_TEXT = "javajavajavajava";
     const std::vector<unsigned int> USER_KEY{PLAIN_TEXT.begin(), PLAIN_TEXT.end()};
@@ -29,11 +29,11 @@ int main() {
     }
 
     AES aes{key, USER_MSG};
-    aes.key_expansion();
 
+    std::vector<unsigned int**> round_keys = aes.key_expansion();
     for (int i = 1; i < 11; ++i) {
         std::cout << "Round " << i-1 << std::endl;
-        std::cout << console_printer(aes.key_schedule.at(i)) << std::endl;
+        std::cout << console_printer(round_keys.at(i)) << std::endl;
     }
 
     return 0;

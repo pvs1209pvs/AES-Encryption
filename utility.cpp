@@ -84,6 +84,12 @@ unsigned int * col_xor(unsigned int* a, unsigned int* b){
 
 }
 
+/**
+ * Returns the column of the input matrix.
+ * @param state Input matrix who column needs to be written.
+ * @param col_number Column number that needs to be added.
+ * @return Column of the input matrix.
+ */
 unsigned int * get_col(unsigned int ** state,int col_number){
 
     unsigned int * col = (unsigned int *)malloc(sizeof(unsigned int)*4);
@@ -96,6 +102,12 @@ unsigned int * get_col(unsigned int ** state,int col_number){
 
 }
 
+/**
+ * Sets the column of the state matrix.
+ * @param state Input state matrix whose column needs to be created.
+ * @param source_col Column that provides the value to create the column of the input matrix.
+ * @param col_number Column that needs to be created.
+ */
 void set_col(unsigned int ** &state, unsigned int * source_col, int col_number){
 
     for (int i = 0; i < 4; ++i) {
@@ -104,6 +116,11 @@ void set_col(unsigned int ** &state, unsigned int * source_col, int col_number){
 
 }
 
+/**
+ * Creates the string representation of state matrix.
+ * @param input Input state matrix.
+ * @return String representation of the state matrix.
+ */
 std::string console_printer( unsigned int ** &input){
 
     std::stringstream ss;

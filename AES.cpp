@@ -4,11 +4,10 @@
 #include "utility.h"
 #include "Table.h"
 
-AES::AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m) : key_schedule{} {
+AES::AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m) {
 
     key = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
     msg = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
-    key_schedule.push_back(key);
 
     for (int i = 0; i < 4; ++i) {
         key[i] = (unsigned int *) malloc(sizeof(unsigned int *) * 4);
@@ -20,8 +19,8 @@ AES::AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m)
 
 }
 
-AES::AES(unsigned int **k, const std::vector<unsigned int> &m) : key(k), key_schedule(){
-    key_schedule.push_back(k);
+AES::AES(unsigned int **k, const std::vector<unsigned int> &m) : key(k){
+
 }
 
 
@@ -33,6 +32,12 @@ AES::~AES() {
 }
 
 
+/**
+ * Generates next round-key from the last round-key.
+ * @param parent_key Round key from the last round.
+ * @param round_number Round number.
+ * @return Round-key for the next round.
+ */
 unsigned int ** AES::key_gen(unsigned int** parent_key, int round_number) {
 
     unsigned int **round_key = (unsigned int **) malloc(sizeof(unsigned int) * 4);
@@ -49,7 +54,6 @@ unsigned int ** AES::key_gen(unsigned int** parent_key, int round_number) {
 
     // 0 col of round key
     // parent key ^ round key ^ rcon
-    // TODO : rcon value needs to be changed to current round key number
     set_col(round_key, col_xor(rcon[round_number], col_xor(get_col(parent_key, 0), last_col)), 0);
 
     // 1,2,3 col of round key
@@ -61,20 +65,40 @@ unsigned int ** AES::key_gen(unsigned int** parent_key, int round_number) {
 
 }
 
+/**
+ * Rotate the word upwards/leftwards.
+ * @param col word to be rotated upwards/leftwards.
+ */
 void AES::rot_word(unsigned int *&col) {
     std::rotate(&col[0], &col[0] + 1, &col[4]);
 }
 
+/**
+ * Performs sbox substitution.
+ * @param col Word on which sbox substitution needs be carried out.
+ */
 void AES::sub_bytes(unsigned int *&col) {
     for (int i = 0; i < 4; ++i) {
         col[i] = sbox[col[i]];
     }
 }
 
-void AES::key_expansion() {
+/**
+ * Expands all the keys.
+ * @return keys for all the rounds.
+ */
+std::vector<unsigned int **> AES::key_expansion() {
+
+    std::vector<unsigned int **> round_keys{};
+
+    round_keys.push_back(key);
+
     for (int i = 0; i < 10; ++i) {
-        key_schedule.push_back(key_gen(key_schedule.at(i), i));
+        round_keys.push_back(key_gen(round_keys.at(i), i));
     }
+
+    return round_keys;
+
 }
 
 

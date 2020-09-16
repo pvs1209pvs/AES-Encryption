@@ -1,3 +1,4 @@
-.idea
+algo.odta
 CMakeLists.txt
 cmake-build-debug
+.*
