@@ -7,8 +7,9 @@
 int main() {
 
     // Initialization starts here.
-    const std::string PLAIN_TEXT = "javajavajavajava";
-    const std::vector<unsigned int> USER_KEY{PLAIN_TEXT.begin(), PLAIN_TEXT.end()};
+    const std::string KEY_TEXT = "javajavajavajava";
+    const std::vector<unsigned int> USER_KEY{KEY_TEXT.begin(), KEY_TEXT.end()};
+
     const std::vector<unsigned int> USER_MSG = fread("../message.txt");
 
     unsigned int dummy_key[4][4] = {
@@ -18,22 +19,23 @@ int main() {
             {0x16, 0xa6, 0x88, 0x3c}
     };
 
-    unsigned int **key = (unsigned int **) malloc(sizeof(unsigned int) * 4);
+    unsigned int **trial_key = (unsigned int **) malloc(sizeof(unsigned int) * 4);
     for (int i = 0; i < 4; ++i) {
-        key[i] = (unsigned int *) malloc(sizeof(unsigned int) * 4);
+        trial_key[i] = (unsigned int *) malloc(sizeof(unsigned int) * 4);
     }
-
     for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < 4; ++j) {
-            key[i][j] = dummy_key[i][j];
+            trial_key[i][j] = dummy_key[i][j];
         }
     }
 
     // Initialization ends here.
-    AES aes{key, USER_MSG, 128};
+
+    // with trial key
+    AES aes{trial_key, USER_MSG, 128};
     AES aes1{USER_KEY, USER_MSG, 128};
 
-
+    key_expansion_test(aes.key_expansion());
     return 0;
 }
 

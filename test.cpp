@@ -5,6 +5,10 @@
 #include "test.h"
 #include "utility.h"
 
+#define RED_COLOR "\033[1;31m \u001b[1m"
+#define GREEN_COLOR "\u001b[32m \u001b[1m"
+#define RESET_COLOR "\033[0m \u001b[1m"
+
 void key_expansion_test(std::vector<unsigned int **> keys) {
 
     std::string aes_key_expns = seg_to_block(std::move(keys));
@@ -21,7 +25,12 @@ void key_expansion_test(std::vector<unsigned int **> keys) {
         exit(1);
     }
 
-    std::cout << "Key expansion test = " << (aes_key_expns == file_keys ? "PASSED" : "FAILED") << std::endl;
+    if(aes_key_expns == file_keys ){
+        printf(GREEN_COLOR "Key Expansion PASSED" RESET_COLOR);
+    }
+    else{
+        printf(RED_COLOR "Key Expansion FAILED" RESET_COLOR);
+    }
 
 }
 
