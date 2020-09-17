@@ -10,7 +10,7 @@ int main() {
     const std::string KEY_TEXT = "javajavajavajava";
     const std::vector<unsigned int> USER_KEY{KEY_TEXT.begin(), KEY_TEXT.end()};
 
-    const std::vector<unsigned int> USER_MSG = fread("../message.txt");
+    const std::vector<unsigned int> USER_MSG = fread("../message.txt", 16);
 
     unsigned int dummy_key[4][4] = {
             {0x2b, 0x28, 0xab, 0x09},
@@ -36,6 +36,7 @@ int main() {
     AES aes1{USER_KEY, USER_MSG, 128};
 
     key_expansion_test(aes.key_expansion());
+
     return 0;
 }
 

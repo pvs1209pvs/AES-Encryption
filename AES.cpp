@@ -5,7 +5,8 @@
 #include "utility.h"
 #include "Table.h"
 
-AES::AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m, int bs) : BLOCK_SIZE{bs}, round_wrt_block_size{}{
+AES::AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m, int bs) : BLOCK_SIZE{bs},
+                                                                                           round_wrt_block_size{} {
 
     round_wrt_block_size.insert(std::make_pair(128, 10));
     round_wrt_block_size.insert(std::make_pair(192, 12));
@@ -24,7 +25,8 @@ AES::AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m,
 
 }
 
-AES::AES(unsigned int **k, const std::vector<unsigned int> &m, int bs) : BLOCK_SIZE{bs}, key{k}{
+AES::AES(unsigned int **k, const std::vector<unsigned int> &m, int bs) : BLOCK_SIZE{bs}, key{k} {
+
     round_wrt_block_size.insert(std::make_pair(128, 10));
     round_wrt_block_size.insert(std::make_pair(192, 12));
     round_wrt_block_size.insert(std::make_pair(256, 14));
@@ -59,7 +61,7 @@ std::vector<unsigned int **> AES::key_expansion() {
  * @param round_number Round number.
  * @return Round-key for the next round.
  */
-unsigned int ** AES::key_gen(unsigned int** parent_key, int round_number) {
+unsigned int **AES::key_gen(unsigned int **parent_key, int round_number) {
 
     unsigned int **round_key = (unsigned int **) malloc(sizeof(unsigned int) * 4);
     for (int i = 0; i < 4; ++i) {
@@ -79,7 +81,7 @@ unsigned int ** AES::key_gen(unsigned int** parent_key, int round_number) {
 
     // 1,2,3 col of round key
     for (int i = 1; i < 4; ++i) {
-        set_col(round_key,col_xor(get_col(round_key, i - 1), get_col(parent_key, i)), i);
+        set_col(round_key, col_xor(get_col(round_key, i - 1), get_col(parent_key, i)), i);
     }
 
     return round_key;
