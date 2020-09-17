@@ -25,11 +25,20 @@ AES::AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m,
 
 }
 
-AES::AES(unsigned int **k, const std::vector<unsigned int> &m, int bs) : BLOCK_SIZE{bs}, key{k} {
+AES::AES(unsigned int **k, const std::vector<unsigned int> &m, int bs) : BLOCK_SIZE{bs}, key{k}, round_wrt_block_size{} {
 
     round_wrt_block_size.insert(std::make_pair(128, 10));
     round_wrt_block_size.insert(std::make_pair(192, 12));
     round_wrt_block_size.insert(std::make_pair(256, 14));
+
+
+    msg = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
+
+    for (int i = 0; i < 4; ++i) {
+        msg[i] = (unsigned int *) malloc(sizeof(unsigned int *) * 4);
+    }
+
+    col_major_cnstrctn(msg, m);
 
 }
 

@@ -2,47 +2,51 @@
 #include <iostream>
 #include <sstream>
 #include <utility>
+#include <stdlib.h>
 #include "test.h"
 #include "utility.h"
 
-#define RED_COLOR "\033[1;31m \u001b[1m"
-#define GREEN_COLOR "\u001b[32m \u001b[1m"
-#define RESET_COLOR "\033[0m \u001b[1m"
+void key_expansion_test(std::vector<std::vector<unsigned int **>> aes_keys) {
 
-void key_expansion_test(std::vector<unsigned int **> keys) {
+    std::vector<std::string> answer_keys = read_answer_key();
 
-    std::string aes_key_expns = seg_to_block(std::move(keys));
-    aes_key_expns = aes_key_expns.substr(0, aes_key_expns.length()-1);
+    for (int i = 0; i < 2; ++i) {
 
-    std::string file_keys{};
-    std::ifstream infile{"../correct_key_expansion_test_file.txt", std::ios::in};
+        std::stringstream ss;
+        for (int j = 0; j < aes_keys.at(i).size(); ++j) {
+            ss << hex_mtrx_to_string(aes_keys.at(i).at(j));
+        }
 
-    if (infile.is_open()) {
-        std::getline(infile, file_keys);
-        infile.close();
-    } else {
-        std::cout << "file not opening" << std::endl;
-        exit(1);
-    }
+        if (answer_keys.at(i) == ss.str()) {
+            printf("%c[%dm Key Expansion Test %d PASSED\n", 0x1B, 32, i);
+        } else {
+            printf("%c[%dm Key Expansion Test %d FAILED\n", 0x1B, 31, i);
+        }
 
-    if(aes_key_expns == file_keys ){
-        printf(GREEN_COLOR "Key Expansion PASSED" RESET_COLOR);
-    }
-    else{
-        printf(RED_COLOR "Key Expansion FAILED" RESET_COLOR);
     }
 
 }
 
-std::string seg_to_block(std::vector<unsigned int **> keys) {
+std::vector<std::string> read_answer_key() {
 
-    std::stringstream block{};
+    std::vector<std::string> keys;
+    std::ifstream infile{"../correct_key_expansion_test_file.txt", std::ios::in};
 
-    for (int i = 1; i < keys.size(); ++i) {
-        unsigned int **round_key = keys.at(i);
-        block << console_printer(round_key);
+    if (infile.is_open()) {
+
+        for (int i = 0; i < 2; ++i) {
+            std::string ans_key{};
+            std::getline(infile, ans_key);
+            keys.push_back(ans_key);
+        }
+
+        infile.close();
+
+    } else {
+        std::cout << "couldn't open file" << std::endl;
+        exit(1);
     }
 
-    return block.str();
+    return keys;
 
 }

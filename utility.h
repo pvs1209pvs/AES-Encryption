@@ -19,4 +19,6 @@ unsigned int *get_col(unsigned int **state, int col_number);
 
 void set_col(unsigned int **&state, unsigned int *source_col, int col_number);
 
-std::string console_printer(unsigned int **&input);
+std::string hex_mtrx_to_string(unsigned int **&input);
+
+unsigned int ** static_to_dynamic(unsigned int source[4][4]);

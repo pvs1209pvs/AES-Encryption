@@ -128,16 +128,33 @@ void set_col(unsigned int **&state, unsigned int *source_col, int col_number) {
  * @param input Input state matrix.
  * @return String representation of the state matrix.
  */
-std::string console_printer(unsigned int **&input) {
+std::string hex_mtrx_to_string(unsigned int **&input) {
 
     std::stringstream ss;
 
     for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < 4; ++j) {
-            ss << std::hex << input[i][j] << " ";
+            ss << std::hex << input[j][i];
         }
     }
 
     return ss.str();
+
+}
+
+unsigned int ** static_to_dynamic(unsigned int source[4][4]){
+
+    unsigned int **result = (unsigned int **) malloc(sizeof(unsigned int*) * 4);
+
+    for (int i = 0; i < 4; ++i) {
+        result[i] = (unsigned int *) malloc(sizeof(unsigned int) * 4);
+    }
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            result[i][j] = source[i][j];
+        }
+    }
+
+    return result;
 
 }
