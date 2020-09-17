@@ -80,6 +80,7 @@ unsigned int * col_xor(unsigned int* a, unsigned int* b){
     for (int i = 0; i < 4; ++i) {
         result[i] = a[i] ^ b[i];
     }
+
     return result;
 
 }
@@ -121,7 +122,7 @@ void set_col(unsigned int ** &state, unsigned int * source_col, int col_number){
  * @param input Input state matrix.
  * @return String representation of the state matrix.
  */
-std::string console_printer( unsigned int ** &input){
+std::string console_printer(unsigned int ** &input){
 
     std::stringstream ss;
 
@@ -129,8 +130,8 @@ std::string console_printer( unsigned int ** &input){
         for (int j = 0; j < 4; ++j) {
             ss << std::hex << input[i][j] << " ";
         }
-        ss << std::endl;
     }
 
     return ss.str();
+
 }

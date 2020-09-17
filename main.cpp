@@ -2,10 +2,11 @@
 #include <algorithm>
 #include "utility.h"
 #include "AES.h"
+#include "test.h"
 
 int main() {
 
-
+    // Initialization starts here.
     const std::string PLAIN_TEXT = "javajavajavajava";
     const std::vector<unsigned int> USER_KEY{PLAIN_TEXT.begin(), PLAIN_TEXT.end()};
     const std::vector<unsigned int> USER_MSG = fread("../message.txt");
@@ -28,13 +29,10 @@ int main() {
         }
     }
 
-    AES aes{key, USER_MSG};
+    // Initialization ends here.
+    AES aes{key, USER_MSG, 128};
+    AES aes1{USER_KEY, USER_MSG, 128};
 
-    std::vector<unsigned int**> round_keys = aes.key_expansion();
-    for (int i = 1; i < 11; ++i) {
-        std::cout << "Round " << i-1 << std::endl;
-        std::cout << console_printer(round_keys.at(i)) << std::endl;
-    }
 
     return 0;
 }

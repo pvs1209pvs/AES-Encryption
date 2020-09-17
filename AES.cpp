@@ -1,10 +1,15 @@
 #include <iostream>
 #include <algorithm>
+#include <utility>
 #include "AES.h"
 #include "utility.h"
 #include "Table.h"
 
-AES::AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m) {
+AES::AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m, int bs) : BLOCK_SIZE{bs}, round_wrt_block_size{}{
+
+    round_wrt_block_size.insert(std::make_pair(128, 10));
+    round_wrt_block_size.insert(std::make_pair(192, 12));
+    round_wrt_block_size.insert(std::make_pair(256, 14));
 
     key = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
     msg = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
@@ -19,7 +24,10 @@ AES::AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m)
 
 }
 
-AES::AES(unsigned int **k, const std::vector<unsigned int> &m) : key(k){
+AES::AES(unsigned int **k, const std::vector<unsigned int> &m, int bs) : BLOCK_SIZE{bs}, key{k}{
+    round_wrt_block_size.insert(std::make_pair(128, 10));
+    round_wrt_block_size.insert(std::make_pair(192, 12));
+    round_wrt_block_size.insert(std::make_pair(256, 14));
 
 }
 
@@ -31,6 +39,19 @@ AES::~AES() {
 //    }
 }
 
+std::vector<unsigned int **> AES::key_expansion() {
+
+    std::vector<unsigned int **> round_keys{};
+
+    round_keys.push_back(key);
+
+    for (int i = 0; i < round_wrt_block_size.at(BLOCK_SIZE); ++i) {
+        round_keys.push_back(key_gen(round_keys.at(i), i));
+    }
+
+    return round_keys;
+
+}
 
 /**
  * Generates next round-key from the last round-key.
@@ -83,22 +104,15 @@ void AES::sub_bytes(unsigned int *&col) {
     }
 }
 
+unsigned int **AES::get_key() {
+    return key;
+}
+
+unsigned int **AES::get_msg() {
+    return msg;
+}
+
 /**
  * Expands all the keys.
  * @return keys for all the rounds.
  */
-std::vector<unsigned int **> AES::key_expansion() {
-
-    std::vector<unsigned int **> round_keys{};
-
-    round_keys.push_back(key);
-
-    for (int i = 0; i < 10; ++i) {
-        round_keys.push_back(key_gen(round_keys.at(i), i));
-    }
-
-    return round_keys;
-
-}
-
-
