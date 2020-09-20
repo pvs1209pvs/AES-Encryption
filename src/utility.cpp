@@ -31,6 +31,7 @@ std::vector<unsigned int> fread(const std::string &filename, int num_bytes) {
         file_reader.close();
 
     } else {
+        std::cout << "FILE NOT OPENING" << std::endl;
         exit(1);
     }
 

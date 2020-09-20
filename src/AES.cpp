@@ -25,7 +25,8 @@ AES::AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m,
 
 }
 
-AES::AES(unsigned int **k, const std::vector<unsigned int> &m, int bs) : BLOCK_SIZE{bs}, key{k}, round_wrt_block_size{} {
+AES::AES(unsigned int **k, const std::vector<unsigned int> &m, int bs) : BLOCK_SIZE{bs}, key{k},
+                                                                         round_wrt_block_size{} {
 
     round_wrt_block_size.insert(std::make_pair(128, 10));
     round_wrt_block_size.insert(std::make_pair(192, 12));
@@ -70,6 +71,7 @@ std::vector<unsigned int **> AES::key_expansion() {
  * @param round_number Round number.
  * @return Round-key for the next round.
  */
+
 unsigned int **AES::key_gen(unsigned int **parent_key, int round_number) {
 
     unsigned int **round_key = (unsigned int **) malloc(sizeof(unsigned int) * 4);
