@@ -23,8 +23,8 @@ void run_test() {
 
     std::vector<unsigned int **> trial_keys{};
     trial_keys.reserve(2);
-    for (int i = 0; i < 2; ++i) {
-        trial_keys.push_back(static_to_dynamic(USER_KEY_ARRAY[i]));
+    for (auto & i : USER_KEY_ARRAY) {
+        trial_keys.push_back(static_to_dynamic(i));
     }
 
 
