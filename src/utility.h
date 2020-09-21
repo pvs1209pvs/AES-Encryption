@@ -3,7 +3,9 @@
 #include <vector>
 #include <string>
 
-std::vector<unsigned int> fread(const std::string &filename);
+std::vector<unsigned int> fread_chars(const std::string &filename);
+
+std::vector<std::string> fread_lines(const std::string &filename);
 
 void fwrite(std::string filename, std::vector<unsigned int>);
 

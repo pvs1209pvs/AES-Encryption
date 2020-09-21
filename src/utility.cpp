@@ -9,7 +9,8 @@
  * @param num_bytes Number of bytes to read from the file.
  * @return Vector containing all the ascii text of the file.
  */
-std::vector<unsigned int> fread(const std::string &filename) {
+
+std::vector<unsigned int> fread_chars(const std::string &filename) {
 
     std::ifstream file_reader{filename, std::ios::in};
     std::vector<unsigned int> message{};
@@ -34,6 +35,30 @@ std::vector<unsigned int> fread(const std::string &filename) {
     }
 
     return message;
+
+}
+
+std::vector<std::string> fread_lines(const std::string &filename) {
+
+    std::vector<std::string> keys;
+    std::ifstream infile{filename, std::ios::in};
+
+    if (infile.is_open()) {
+
+        for (int i = 0; i < 2; ++i) {
+            std::string ans_key{};
+            std::getline(infile, ans_key);
+            keys.push_back(ans_key);
+        }
+
+        infile.close();
+
+    } else {
+        std::cout << "couldn't open file" << std::endl;
+        exit(1);
+    }
+
+    return keys;
 
 }
 

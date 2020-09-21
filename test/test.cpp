@@ -1,14 +1,11 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
-#include <fstream>
-#include <iostream>
-#include <sstream>
 #include "test.h"
 #include "utility.h"
 
 TEST_CASE("Key expansion"){
 
-    const std::vector<unsigned int> USER_MSG = fread("../src/message.txt");
+    const std::vector<unsigned int> USER_MSG = fread_chars("../src/message.txt");
 
     unsigned int USER_KEY_ARRAY[][4][4] = {
             {{0x2b, 0x28, 0xab, 0x09},
@@ -42,7 +39,7 @@ TEST_CASE("Key expansion"){
 
 void key_expansion_matching(std::vector<std::vector<unsigned int **>> aes_keys) {
 
-    std::vector<std::string> answer_keys = read_answer_key();
+    std::vector<std::string> answer_keys = fread_lines("../test/correct_key_expansion_test_file.txt");
 
     for (int i = 0; i < 2; ++i) {
 
@@ -54,29 +51,5 @@ void key_expansion_matching(std::vector<std::vector<unsigned int **>> aes_keys) 
         REQUIRE(answer_keys.at(i)==ss.str());
 
     }
-
-}
-
-std::vector<std::string> read_answer_key() {
-
-    std::vector<std::string> keys;
-    std::ifstream infile{"../test/correct_key_expansion_test_file.txt", std::ios::in};
-
-    if (infile.is_open()) {
-
-        for (int i = 0; i < 2; ++i) {
-            std::string ans_key{};
-            std::getline(infile, ans_key);
-            keys.push_back(ans_key);
-        }
-
-        infile.close();
-
-    } else {
-        std::cout << "couldn't open file" << std::endl;
-        exit(1);
-    }
-
-    return keys;
 
 }
