@@ -1,12 +1,14 @@
+#define CATCH_CONFIG_MAIN
+#include "catch.hpp"
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include "test.h"
 #include "utility.h"
 
-void run_test() {
+TEST_CASE("Key expansion"){
 
-    const std::vector<unsigned int> USER_MSG = fread("../src/message.txt", 16);
+    const std::vector<unsigned int> USER_MSG = fread("../src/message.txt");
 
     unsigned int USER_KEY_ARRAY[][4][4] = {
             {{0x2b, 0x28, 0xab, 0x09},
@@ -27,7 +29,6 @@ void run_test() {
         trial_keys.push_back(static_to_dynamic(i));
     }
 
-
     std::vector<std::vector<unsigned int **>> expanded_key_schedules{};
     for (int i = 0; i < 2; ++i) {
         AES aes(trial_keys.at(i), USER_MSG, 128);
@@ -35,11 +36,11 @@ void run_test() {
 
     }
 
-    key_expansion_test(expanded_key_schedules);
+    key_expansion_matching(expanded_key_schedules);
 
 }
 
-void key_expansion_test(std::vector<std::vector<unsigned int **>> aes_keys) {
+void key_expansion_matching(std::vector<std::vector<unsigned int **>> aes_keys) {
 
     std::vector<std::string> answer_keys = read_answer_key();
 
@@ -50,11 +51,7 @@ void key_expansion_test(std::vector<std::vector<unsigned int **>> aes_keys) {
             ss << hex_mtrx_to_string(aes_keys.at(i).at(j));
         }
 
-        if (answer_keys.at(i) == ss.str()) {
-            printf("%c[%dm Key Expansion Test %d PASSED\n", 0x1B, 32, i);
-        } else {
-            printf("%c[%dm Key Expansion Test %d FAILED\n", 0x1B, 31, i);
-        }
+        REQUIRE(answer_keys.at(i)==ss.str());
 
     }
 

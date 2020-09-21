@@ -9,7 +9,7 @@
  * @param num_bytes Number of bytes to read from the file.
  * @return Vector containing all the ascii text of the file.
  */
-std::vector<unsigned int> fread(const std::string &filename, int num_bytes) {
+std::vector<unsigned int> fread(const std::string &filename) {
 
     std::ifstream file_reader{filename, std::ios::in};
     std::vector<unsigned int> message{};
@@ -23,8 +23,6 @@ std::vector<unsigned int> fread(const std::string &filename, int num_bytes) {
             if (value == -1)continue;
 
             message.push_back(value);
-
-            if (message.size() == num_bytes)break;
 
         }
 

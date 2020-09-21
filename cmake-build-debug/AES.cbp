@@ -109,6 +109,9 @@
 		<Unit filename="/home/paramvir-singh/COSC/3P93/AES/src/utility.h">
 			<Option target="AES"/>
 		</Unit>
+		<Unit filename="/home/paramvir-singh/COSC/3P93/AES/test/catch.hpp">
+			<Option target="AES"/>
+		</Unit>
 		<Unit filename="/home/paramvir-singh/COSC/3P93/AES/test/test.cpp">
 			<Option target="AES"/>
 		</Unit>

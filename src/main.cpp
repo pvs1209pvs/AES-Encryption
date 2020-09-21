@@ -4,14 +4,14 @@
 #include "AES.h"
 #include "test.h"
 
-int main() {
-
-
-    run_test();
-
-
-    return 0;
-}
+//int main() {
+//
+//
+//    run_test();
+//
+//
+//    return 0;
+//}
 
 // msg = my name is paramvir singh.
 // key = javajavajava

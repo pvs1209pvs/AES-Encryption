@@ -18,6 +18,7 @@ CMakeFiles/AES.dir/src/utility.cpp.o: ../src/utility.h
 
 CMakeFiles/AES.dir/test/test.cpp.o: ../src/AES.h
 CMakeFiles/AES.dir/test/test.cpp.o: ../src/utility.h
+CMakeFiles/AES.dir/test/test.cpp.o: ../test/catch.hpp
 CMakeFiles/AES.dir/test/test.cpp.o: ../test/test.cpp
 CMakeFiles/AES.dir/test/test.cpp.o: ../test/test.h
 

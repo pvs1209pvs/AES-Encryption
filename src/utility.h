@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-std::vector<unsigned int> fread(const std::string &filename, int num_bytes);
+std::vector<unsigned int> fread(const std::string &filename);
 
 void fwrite(std::string filename, std::vector<unsigned int>);
 
