@@ -6,6 +6,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/AES.dir/src/main.cpp.o"
   "CMakeFiles/AES.dir/src/utility.cpp.o"
   "CMakeFiles/AES.dir/test/test.cpp.o"
+  "CMakeFiles/AES.dir/test/tester.cpp.o"
 )
 
 # Per-language clean rules from dependency scanning.

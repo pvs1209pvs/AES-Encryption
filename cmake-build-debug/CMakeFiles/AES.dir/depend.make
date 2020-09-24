@@ -8,7 +8,6 @@ CMakeFiles/AES.dir/src/AES.cpp.o: ../src/utility.h
 
 CMakeFiles/AES.dir/src/Table.cpp.o: ../src/Table.cpp
 
-CMakeFiles/AES.dir/src/main.cpp.o: ../test/test.h
 CMakeFiles/AES.dir/src/main.cpp.o: ../src/AES.h
 CMakeFiles/AES.dir/src/main.cpp.o: ../src/main.cpp
 CMakeFiles/AES.dir/src/main.cpp.o: ../src/utility.h
@@ -16,9 +15,8 @@ CMakeFiles/AES.dir/src/main.cpp.o: ../src/utility.h
 CMakeFiles/AES.dir/src/utility.cpp.o: ../src/utility.cpp
 CMakeFiles/AES.dir/src/utility.cpp.o: ../src/utility.h
 
-CMakeFiles/AES.dir/test/test.cpp.o: ../src/AES.h
-CMakeFiles/AES.dir/test/test.cpp.o: ../src/utility.h
-CMakeFiles/AES.dir/test/test.cpp.o: ../test/catch.hpp
 CMakeFiles/AES.dir/test/test.cpp.o: ../test/test.cpp
-CMakeFiles/AES.dir/test/test.cpp.o: ../test/test.h
+
+CMakeFiles/AES.dir/test/tester.cpp.o: ../test/tester.cpp
+CMakeFiles/AES.dir/test/tester.cpp.o: ../test/tester.h
 

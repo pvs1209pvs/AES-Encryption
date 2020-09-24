@@ -46,6 +46,7 @@
 				<Compiler>
 					<Add directory="/home/paramvir-singh/COSC/3P93/AES/src"/>
 					<Add directory="/home/paramvir-singh/COSC/3P93/AES/test"/>
+					<Add directory="/home/paramvir-singh/COSC/3P93/AES/include"/>
 					<Add directory="/usr/include/c++/7"/>
 					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
 					<Add directory="/usr/include/c++/7/backward"/>
@@ -71,6 +72,7 @@
 				<Compiler>
 					<Add directory="/home/paramvir-singh/COSC/3P93/AES/src"/>
 					<Add directory="/home/paramvir-singh/COSC/3P93/AES/test"/>
+					<Add directory="/home/paramvir-singh/COSC/3P93/AES/include"/>
 					<Add directory="/usr/include/c++/7"/>
 					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
 					<Add directory="/usr/include/c++/7/backward"/>
@@ -88,6 +90,9 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/paramvir-singh/COSC/3P93/AES/include/catch.hpp">
+			<Option target="AES"/>
+		</Unit>
 		<Unit filename="/home/paramvir-singh/COSC/3P93/AES/src/AES.cpp">
 			<Option target="AES"/>
 		</Unit>
@@ -109,13 +114,16 @@
 		<Unit filename="/home/paramvir-singh/COSC/3P93/AES/src/utility.h">
 			<Option target="AES"/>
 		</Unit>
-		<Unit filename="/home/paramvir-singh/COSC/3P93/AES/test/catch.hpp">
-			<Option target="AES"/>
-		</Unit>
 		<Unit filename="/home/paramvir-singh/COSC/3P93/AES/test/test.cpp">
 			<Option target="AES"/>
 		</Unit>
 		<Unit filename="/home/paramvir-singh/COSC/3P93/AES/test/test.h">
+			<Option target="AES"/>
+		</Unit>
+		<Unit filename="/home/paramvir-singh/COSC/3P93/AES/test/tester.cpp">
+			<Option target="AES"/>
+		</Unit>
+		<Unit filename="/home/paramvir-singh/COSC/3P93/AES/test/tester.h">
 			<Option target="AES"/>
 		</Unit>
 		<Unit filename="/home/paramvir-singh/COSC/3P93/AES/CMakeLists.txt">

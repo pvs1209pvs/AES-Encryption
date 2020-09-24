@@ -278,6 +278,33 @@ test/test.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AES.dir/build.make CMakeFiles/AES.dir/test/test.cpp.s
 .PHONY : test/test.cpp.s
 
+test/tester.o: test/tester.cpp.o
+
+.PHONY : test/tester.o
+
+# target to build an object file
+test/tester.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AES.dir/build.make CMakeFiles/AES.dir/test/tester.cpp.o
+.PHONY : test/tester.cpp.o
+
+test/tester.i: test/tester.cpp.i
+
+.PHONY : test/tester.i
+
+# target to preprocess a source file
+test/tester.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AES.dir/build.make CMakeFiles/AES.dir/test/tester.cpp.i
+.PHONY : test/tester.cpp.i
+
+test/tester.s: test/tester.cpp.s
+
+.PHONY : test/tester.s
+
+# target to generate assembly for a file
+test/tester.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AES.dir/build.make CMakeFiles/AES.dir/test/tester.cpp.s
+.PHONY : test/tester.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -302,6 +329,9 @@ help:
 	@echo "... test/test.o"
 	@echo "... test/test.i"
 	@echo "... test/test.s"
+	@echo "... test/tester.o"
+	@echo "... test/tester.i"
+	@echo "... test/tester.s"
 .PHONY : help
 
 

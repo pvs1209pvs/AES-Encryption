@@ -1,1 +1,1 @@
-/usr/bin/c++  -g   CMakeFiles/AES.dir/src/main.cpp.o CMakeFiles/AES.dir/src/utility.cpp.o CMakeFiles/AES.dir/src/AES.cpp.o CMakeFiles/AES.dir/src/Table.cpp.o CMakeFiles/AES.dir/test/test.cpp.o  -o AES 
+/usr/bin/c++  -g   CMakeFiles/AES.dir/src/main.cpp.o CMakeFiles/AES.dir/src/utility.cpp.o CMakeFiles/AES.dir/src/AES.cpp.o CMakeFiles/AES.dir/src/Table.cpp.o CMakeFiles/AES.dir/test/test.cpp.o CMakeFiles/AES.dir/test/tester.cpp.o  -o AES  /usr/lib/libgtest.a -lpthread 

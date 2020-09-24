@@ -23,6 +23,11 @@ AES::AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m,
     col_major_cnstrctn(key, k);
     col_major_cnstrctn(msg, m);
 
+//    for (int i = 0; i < 4; ++i) {
+//        for (int j = 0; j < 4; ++j) {
+//            std::cout << std::hex << key[i][j] << std::endl;
+//        }
+//    }
 }
 
 AES::AES(unsigned int **k, const std::vector<unsigned int> &m, int bs) : BLOCK_SIZE{bs}, key{k},
@@ -41,14 +46,6 @@ AES::AES(unsigned int **k, const std::vector<unsigned int> &m, int bs) : BLOCK_S
 
     col_major_cnstrctn(msg, m);
 
-}
-
-
-AES::~AES() {
-//    for (int i = 0; i < 4; ++i) {
-//        free(key[i]);
-//        free(msg[i]);
-//    }
 }
 
 std::vector<unsigned int **> AES::key_expansion() {

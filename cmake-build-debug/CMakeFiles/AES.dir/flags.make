@@ -6,5 +6,5 @@ CXX_FLAGS = -g   -std=gnu++14
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/paramvir-singh/COSC/3P93/AES/src -I/home/paramvir-singh/COSC/3P93/AES/test 
+CXX_INCLUDES = -I/home/paramvir-singh/COSC/3P93/AES/src -I/home/paramvir-singh/COSC/3P93/AES/test -I/home/paramvir-singh/COSC/3P93/AES/include 
 

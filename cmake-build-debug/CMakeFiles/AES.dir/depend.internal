@@ -9,7 +9,6 @@ CMakeFiles/AES.dir/src/AES.cpp.o
 CMakeFiles/AES.dir/src/Table.cpp.o
  /home/paramvir-singh/COSC/3P93/AES/src/Table.cpp
 CMakeFiles/AES.dir/src/main.cpp.o
- ../test/test.h
  /home/paramvir-singh/COSC/3P93/AES/src/AES.h
  /home/paramvir-singh/COSC/3P93/AES/src/main.cpp
  /home/paramvir-singh/COSC/3P93/AES/src/utility.h
@@ -17,8 +16,7 @@ CMakeFiles/AES.dir/src/utility.cpp.o
  /home/paramvir-singh/COSC/3P93/AES/src/utility.cpp
  /home/paramvir-singh/COSC/3P93/AES/src/utility.h
 CMakeFiles/AES.dir/test/test.cpp.o
- ../src/AES.h
- ../src/utility.h
- /home/paramvir-singh/COSC/3P93/AES/test/catch.hpp
  /home/paramvir-singh/COSC/3P93/AES/test/test.cpp
- /home/paramvir-singh/COSC/3P93/AES/test/test.h
+CMakeFiles/AES.dir/test/tester.cpp.o
+ /home/paramvir-singh/COSC/3P93/AES/test/tester.cpp
+ /home/paramvir-singh/COSC/3P93/AES/test/tester.h

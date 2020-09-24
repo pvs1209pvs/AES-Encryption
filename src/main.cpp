@@ -1,17 +1,20 @@
 #include <iostream>
 #include <algorithm>
+#include <gtest/gtest.h>
 #include "utility.h"
 #include "AES.h"
-#include "test.h"
 
-//int main() {
+int main(int argc, char *argv[]) {
+
+   testing::InitGoogleTest(&argc, argv);
 //
+//    std::vector<unsigned int> msg = fread_chars("../src/message.txt");
+//    const std::vector<unsigned int> key = fread_chars("../src/key.txt");
 //
-//    run_test();
-//
-//
-//    return 0;
-//}
+//    AES aes(key, msg, 128);
+
+    return RUN_ALL_TESTS();
+}
 
 // msg = my name is paramvir singh.
 // key = javajavajava
