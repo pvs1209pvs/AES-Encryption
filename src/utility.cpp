@@ -152,7 +152,7 @@ void set_col(unsigned int **&state, unsigned int *source_col, int col_number) {
  * @param input Input state matrix.
  * @return String representation of the state matrix.
  */
-std::string hex_mtrx_to_string(unsigned int **&input) {
+std::string hex_mtrx_to_string(unsigned int **input) {
 
     std::stringstream ss;
 

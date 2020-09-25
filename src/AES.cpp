@@ -122,6 +122,14 @@ unsigned int **AES::get_msg() {
     return msg;
 }
 
+int AES::get_BLOCK_SIZE() {
+    return this->BLOCK_SIZE;
+}
+
+std::map<int, int> AES::get_round_wrt_block_size() {
+    return this->round_wrt_block_size;
+}
+
 /**
  * Expands all the keys.
  * @return keys for all the rounds.

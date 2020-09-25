@@ -1,2 +1,5 @@
+test/
+cmake-build-debug/
+CMakeLists.txt
 algo.odt
-.*
+.idea/
