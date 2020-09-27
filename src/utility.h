@@ -5,7 +5,7 @@
 
 std::vector<unsigned int> fread_chars(const std::string &filename);
 
-std::vector<std::string> fread_lines(const std::string &filename);
+std::vector<std::string> fread_lines(const std::string &filename, int num_lines);
 
 void fwrite(std::string filename, std::vector<unsigned int>);
 

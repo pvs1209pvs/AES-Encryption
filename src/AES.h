@@ -9,8 +9,6 @@ class AES {
 private:
     unsigned int **key;
     unsigned int **msg;
-    const int BLOCK_SIZE; // in bits
-    std::map<int, int> round_wrt_block_size; // number of rounds wrt to block size
 
     unsigned int **key_gen(unsigned int **parent_key, int round_number);
 
@@ -29,8 +27,5 @@ public:
 
     unsigned int **get_msg();
 
-    int get_BLOCK_SIZE();
-
-    std::map<int, int> get_round_wrt_block_size();
 };
 

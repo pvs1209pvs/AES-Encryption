@@ -5,12 +5,8 @@
 #include "utility.h"
 #include "Table.h"
 
-AES::AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m, int bs) : BLOCK_SIZE{bs},
-                                                                                           round_wrt_block_size{} {
+AES::AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m, int bs) {
 
-    round_wrt_block_size.insert(std::make_pair(128, 10));
-    round_wrt_block_size.insert(std::make_pair(192, 12));
-    round_wrt_block_size.insert(std::make_pair(256, 14));
 
     key = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
     msg = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
@@ -30,12 +26,7 @@ AES::AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m,
 //    }
 }
 
-AES::AES(unsigned int **k, const std::vector<unsigned int> &m, int bs) : BLOCK_SIZE{bs}, key{k},
-                                                                         round_wrt_block_size{} {
-
-    round_wrt_block_size.insert(std::make_pair(128, 10));
-    round_wrt_block_size.insert(std::make_pair(192, 12));
-    round_wrt_block_size.insert(std::make_pair(256, 14));
+AES::AES(unsigned int **k, const std::vector<unsigned int> &m, int bs) : key{k}{
 
 
     msg = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
@@ -54,7 +45,7 @@ std::vector<unsigned int **> AES::key_expansion() {
 
     round_keys.push_back(key);
 
-    for (int i = 0; i < round_wrt_block_size.at(BLOCK_SIZE); ++i) {
+    for (int i = 0; i < 10; ++i) {
         round_keys.push_back(key_gen(round_keys.at(i), i));
     }
 
@@ -102,6 +93,7 @@ unsigned int **AES::key_gen(unsigned int **parent_key, int round_number) {
  */
 void AES::rot_word(unsigned int *&col) {
     std::rotate(&col[0], &col[0] + 1, &col[4]);
+
 }
 
 /**
@@ -122,13 +114,6 @@ unsigned int **AES::get_msg() {
     return msg;
 }
 
-int AES::get_BLOCK_SIZE() {
-    return this->BLOCK_SIZE;
-}
-
-std::map<int, int> AES::get_round_wrt_block_size() {
-    return this->round_wrt_block_size;
-}
 
 /**
  * Expands all the keys.
