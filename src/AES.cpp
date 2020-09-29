@@ -1,11 +1,9 @@
-#include <iostream>
 #include <algorithm>
-#include <utility>
 #include "AES.h"
 #include "utility.h"
 #include "Table.h"
 
-AES::AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m, int bs) {
+AES::AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m) {
 
 
     key = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
@@ -19,14 +17,9 @@ AES::AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m,
     col_major_cnstrctn(key, k);
     col_major_cnstrctn(msg, m);
 
-//    for (int i = 0; i < 4; ++i) {
-//        for (int j = 0; j < 4; ++j) {
-//            std::cout << std::hex << key[i][j] << std::endl;
-//        }
-//    }
 }
 
-AES::AES(unsigned int **k, const std::vector<unsigned int> &m, int bs) : key{k}{
+AES::AES(unsigned int **k, const std::vector<unsigned int> &m) : key{k}{
 
 
     msg = (unsigned int **) malloc(sizeof(unsigned int *) * 4);

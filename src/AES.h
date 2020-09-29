@@ -4,6 +4,8 @@
 #include <vector>
 #include <map>
 
+#define BLOCK_SIZE 128
+
 class AES {
 
 private:
@@ -17,9 +19,9 @@ private:
     void rot_word(unsigned int *&col);
 
 public:
-    AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m, int bs);
+    AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m);
 
-    AES(unsigned int **k, const std::vector<unsigned int> &m, int bs);
+    AES(unsigned int **k, const std::vector<unsigned int> &m);
 
     std::vector<unsigned int **> key_expansion();
 
