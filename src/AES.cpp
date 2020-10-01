@@ -160,9 +160,35 @@ unsigned int** AES::add_round_key(unsigned int **a, unsigned int **b) {
  * @param array on which mixing needs to be performed
  *
  * */
-void AES::mul_mixin_consts(unsigned int** arr) {
+void AES::mix_step(unsigned int** arr) {
 
+    for(int i = 0; i<4; i++) {
+        for (int j = 0; j < 4; j++) {
+            for(int k = 0; k<4; k++) {
+                unsigned int temp = overflow_handle(mix[k][j],arr[i][k]);
+                arr[i][j] ^= temp;
+            }
+        }
+    }
+}
 
+/*
+ * performs core functions of mixing step
+
+ * @param first int to perform calculations
+ * @param second int perform calculations
+ *
+ * */
+unsigned int mix_step_helper(unsigned int x, unsigned int mix_no){
+
+    if(mix_no==1){
+        return x;
+    }else if(mix_no==2){
+        return x<<1 ^ 0x1b;
+    } else if(mix_no==3){
+        int oldX = x;
+        return x<<1 ^ 0x1b ^ oldX;
+    }
 }
 
 /*
@@ -175,7 +201,7 @@ bool AES::round(unsigned int** text, unsigned int** key){
 
    substitute_step(text);
    rotate_step(text);
-    mul_mixin_consts(text);
+   mul_mixin_consts(text);
    text = add_round_key(text, key);
 
    return true;

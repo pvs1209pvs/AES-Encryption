@@ -43,5 +43,6 @@ public:
 
     unsigned int **get_msg();
 
+    void mix_step(unsigned int **arr);
 };
 
