@@ -164,6 +164,10 @@ void set_col(unsigned int **&state, unsigned int *source_col, int col_number) {
  */
 std::string hex_mtrx_to_string(unsigned int **input) {
 
+    if(input == nullptr){
+        return "nullstate";
+    }
+
     std::stringstream ss;
 
     for (int i = 0; i < 4; ++i) {

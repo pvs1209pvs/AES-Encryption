@@ -1,7 +1,4 @@
 #include <algorithm>
-
-#include <utility>
-#include <bitset>
 #include "AES.h"
 #include "utility.h"
 #include "Table.h"
@@ -22,7 +19,7 @@ AES::AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m)
 
 }
 
-AES::AES(unsigned int **k, const std::vector<unsigned int> &m) : key{k}{
+AES::AES(unsigned int **k, const std::vector<unsigned int> &m) : key{k} {
 
 
     msg = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
@@ -105,12 +102,11 @@ void AES::sub_bytes(unsigned int *&col) {
 
 /**
  * performs subsitution step on whole year
- *
  * @param array which where this step will be performed
- * */
-void AES::substitute_step(unsigned int **arr){
-    for(int i=0; i<4; i++){
-        for (int j = 0; j <4 ; j++) {
+ */
+void AES::substitute_step(unsigned int **arr) {
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
             arr[i][j] = sbox[arr[i][j]];
         }
     }
@@ -118,28 +114,38 @@ void AES::substitute_step(unsigned int **arr){
 
 /**
  * performs rotation step on whole array
- *
  * @param array which where this step will be performed
- * */
-void AES::rotate_step(unsigned int **arr){
-    for(int i=0; i<4; i++){
-            std::rotate(&arr[i][0], &arr[i][0] + i, &arr[i][4]);
+ */
+void AES::shift_row_step(unsigned int **arr) {
+    for (int i = 0; i < 4; i++) {
+        std::rotate(&arr[i][0], &arr[i][0] + i, &arr[i][4]);
     }
 }
 
-/*
+/**
+ * performs Mixing step of AES
+ * @param array on which mixing needs to be performed
+ */
+void AES::mul_mixin_consts(unsigned int **arr) {
+
+}
+
+unsigned int AES::overflow_handle(unsigned int x, unsigned int mix_no) {
+    return 0;
+}
+
+
+/**
  * performs Key rounding step of AES
- *
  * @param array 'a' and array 'b'
  * @return XOR of 'a' and 'b'
- *
- * */
-unsigned int** AES::add_round_key(unsigned int **a, unsigned int **b) {
+ */
+unsigned int **AES::add_round_key(unsigned int **a, unsigned int **b) {
 
     unsigned int **result = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
 
     for (int i = 0; i < 4; ++i) {
-        result[0] = (unsigned int *) malloc(sizeof(unsigned int) * 4);
+        result[i] = (unsigned int *) malloc(sizeof(unsigned int) * 4);
     }
 
     for (int i = 0; i < 4; ++i) {
@@ -152,33 +158,21 @@ unsigned int** AES::add_round_key(unsigned int **a, unsigned int **b) {
 
 }
 
-
-
-/*
- * performs Mixing step of AES
-
- * @param array on which mixing needs to be performed
- *
- * */
-void AES::mul_mixin_consts(unsigned int** arr) {
-
-
-}
-
-/*
+/**
  * one complete round of AES encryption
  * @param text on which round will be ran
  * @param key to use for current round number
- *
- * */
-bool AES::round(unsigned int** text, unsigned int** key){
+ */
+unsigned int **AES::round(unsigned int **text, unsigned int **key) {
 
-   substitute_step(text);
-   rotate_step(text);
+    substitute_step(text);
+    shift_row_step(text);
     mul_mixin_consts(text);
-   text = add_round_key(text, key);
+    unsigned int ** new_state = add_round_key(text, key);
 
-   return true;
+    // should return new_state
+
+    return nullptr;
 }
 
 
@@ -191,7 +185,5 @@ unsigned int **AES::get_msg() {
 }
 
 
-unsigned int AES::overflow_handle(unsigned int x, unsigned int mix_no) {
-    return 0;
-}
+
 

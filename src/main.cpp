@@ -7,7 +7,6 @@ int main(int argc, char *argv[]) {
         return run_tests(argc, argv);
     }
     else{
-        int a = mix[0][0];
         return 0;
     }
 
