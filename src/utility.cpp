@@ -2,6 +2,9 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <z3.h>
+#include <cstring>
+#include "Table.h"
 
 /**
  * Reads ascii text from the file.
@@ -62,6 +65,30 @@ std::vector<std::string> fread_lines(const std::string &filename) {
 
 }
 
+/*
+ * Writes encrypted text to a file 'EncryptedText.txt'
+ * @param filename Name of the file to be write.
+ * @param encrypted string that will be printed to a file
+ * @return boolean which is a confimation flag of success
+ *
+ * */
+bool fwrite_lines(const std::string &fname, const char *encrypted){
+
+    int sucessFlag = 0;
+    std::ofstream fileWriter ("EncryptedText.txt");
+
+    if(fileWriter.is_open()){
+
+        fileWriter.write(encrypted, (unsigned)strlen(encrypted));
+
+        fileWriter.close();
+
+        sucessFlag = 1;
+    }
+
+    return sucessFlag;
+}
+
 /**
  * Initializes a 4*4 matrix in a column-major format.
  * @param state 4*4 matrix to be initialized.
@@ -79,23 +106,7 @@ void col_major_cnstrctn(unsigned int **&state, std::vector<unsigned int> text) {
 
 }
 
-unsigned int **mtrx_xor(unsigned int **a, unsigned int **b) {
 
-    unsigned int **result = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
-
-    for (int i = 0; i < 4; ++i) {
-        result[0] = (unsigned int *) malloc(sizeof(unsigned int) * 4);
-    }
-
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
-            result[i][j] = a[i][j] ^ b[i][j];
-        }
-    }
-
-    return result;
-
-}
 
 /**
  * Performs xor on columns.
@@ -182,3 +193,4 @@ unsigned int ** static_to_dynamic(unsigned int source[4][4]){
     return result;
 
 }
+

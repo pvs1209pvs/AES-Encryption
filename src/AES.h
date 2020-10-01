@@ -32,5 +32,27 @@ public:
     int get_BLOCK_SIZE();
 
     std::map<int, int> get_round_wrt_block_size();
+
+    void substituteStep();
+
+    void rotateStep();
+
+    void MixStep();
+
+    void key_round_step();
+
+    void substitute_step(unsigned int **&arr);
+
+    void rotate_step(unsigned int **&arr);
+
+    unsigned int **mix_step(unsigned int **a, unsigned int **b);
+
+    unsigned int **key_rounding(unsigned int **a, unsigned int **b);
+
+    unsigned int overflow_handle(unsigned int x, unsigned int mixNo);
+
+    void mul_mixin_consts(unsigned int **&arr);
+
+    bool round_AES(unsigned int **&text, unsigned int **key);
 };
 
