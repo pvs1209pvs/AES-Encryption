@@ -1,5 +1,3 @@
-// laid out in column-major format
-// rcon[2] = gives the column needed for round 3
 unsigned int rcon[10][4] = {
         {0x01, 0x00, 0x00, 0x00},
         {0x02, 0x00, 0x00, 0x00},

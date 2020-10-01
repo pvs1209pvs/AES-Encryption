@@ -2,7 +2,6 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include <z3.h>
 #include <cstring>
 #include "Table.h"
 

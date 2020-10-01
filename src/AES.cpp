@@ -1,10 +1,7 @@
 #include <algorithm>
-<<<<<<< HEAD
+
 #include <utility>
 #include <bitset>
-#include <z3.h>
-=======
->>>>>>> e17544210e570ac2f9bf9fa027cae80d8f56928f
 #include "AES.h"
 #include "utility.h"
 #include "Table.h"
@@ -93,7 +90,6 @@ unsigned int **AES::key_gen(unsigned int **parent_key, int round_number) {
  */
 void AES::rot_word(unsigned int *&col) {
     std::rotate(&col[0], &col[0] + 1, &col[4]);
-
 }
 
 /**
@@ -107,23 +103,12 @@ void AES::sub_bytes(unsigned int *&col) {
     }
 }
 
-unsigned int **AES::get_key() {
-    return key;
-}
-
-unsigned int **AES::get_msg() {
-    return msg;
-}
-
-
-
-
 /**
  * performs subsitution step on whole year
  *
  * @param array which where this step will be performed
  * */
-void AES::substitute_step(unsigned int **&arr){
+void AES::substitute_step(unsigned int **arr){
     for(int i=0; i<4; i++){
         for (int j = 0; j <4 ; j++) {
             arr[i][j] = sbox[arr[i][j]];
@@ -136,16 +121,11 @@ void AES::substitute_step(unsigned int **&arr){
  *
  * @param array which where this step will be performed
  * */
-void AES::rotate_step(unsigned int **&arr){
+void AES::rotate_step(unsigned int **arr){
     for(int i=0; i<4; i++){
             std::rotate(&arr[i][0], &arr[i][0] + i, &arr[i][4]);
     }
 }
-
-
-
-
-
 
 /*
  * performs Key rounding step of AES
@@ -154,7 +134,7 @@ void AES::rotate_step(unsigned int **&arr){
  * @return XOR of 'a' and 'b'
  *
  * */
-unsigned int** AES::key_rounding(unsigned int **a, unsigned int **b) {
+unsigned int** AES::add_round_key(unsigned int **a, unsigned int **b) {
 
     unsigned int **result = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
 
@@ -180,7 +160,7 @@ unsigned int** AES::key_rounding(unsigned int **a, unsigned int **b) {
  * @param array on which mixing needs to be performed
  *
  * */
-void AES::mul_mixin_consts(unsigned int** &arr) {
+void AES::mul_mixin_consts(unsigned int** arr) {
 
 
 }
@@ -191,12 +171,27 @@ void AES::mul_mixin_consts(unsigned int** &arr) {
  * @param key to use for current round number
  *
  * */
-bool AES::round_AES(unsigned int** &text, unsigned int** key){
+bool AES::round(unsigned int** text, unsigned int** key){
 
    substitute_step(text);
-   mul_mixin_consts(text);
    rotate_step(text);
-   text = key_rounding(text, key);
+    mul_mixin_consts(text);
+   text = add_round_key(text, key);
 
    return true;
 }
+
+
+unsigned int **AES::get_key() {
+    return key;
+}
+
+unsigned int **AES::get_msg() {
+    return msg;
+}
+
+
+unsigned int AES::overflow_handle(unsigned int x, unsigned int mix_no) {
+    return 0;
+}
+
