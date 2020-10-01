@@ -4,13 +4,13 @@
 #include <vector>
 #include <map>
 
+#define BLOCK_SIZE 128
+
 class AES {
 
 private:
     unsigned int **key;
     unsigned int **msg;
-    const int BLOCK_SIZE; // in bits
-    std::map<int, int> round_wrt_block_size; // number of rounds wrt to block size
 
     unsigned int **key_gen(unsigned int **parent_key, int round_number);
 
@@ -19,9 +19,9 @@ private:
     void rot_word(unsigned int *&col);
 
 public:
-    AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m, int bs);
+    AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m);
 
-    AES(unsigned int **k, const std::vector<unsigned int> &m, int bs);
+    AES(unsigned int **k, const std::vector<unsigned int> &m);
 
     std::vector<unsigned int **> key_expansion();
 
@@ -29,6 +29,7 @@ public:
 
     unsigned int **get_msg();
 
+<<<<<<< HEAD
     int get_BLOCK_SIZE();
 
     std::map<int, int> get_round_wrt_block_size();
@@ -54,5 +55,7 @@ public:
     void mul_mixin_consts(unsigned int **&arr);
 
     bool round_AES(unsigned int **&text, unsigned int **key);
+=======
+>>>>>>> e17544210e570ac2f9bf9fa027cae80d8f56928f
 };
 

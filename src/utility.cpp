@@ -41,14 +41,14 @@ std::vector<unsigned int> fread_chars(const std::string &filename) {
 
 }
 
-std::vector<std::string> fread_lines(const std::string &filename) {
+std::vector<std::string> fread_lines(const std::string &filename, int num_lines) {
 
     std::vector<std::string> keys;
     std::ifstream infile{filename, std::ios::in};
 
     if (infile.is_open()) {
 
-        for (int i = 0; i < 2; ++i) {
+        for (int i = 0; i < num_lines; ++i) {
             std::string ans_key{};
             std::getline(infile, ans_key);
             keys.push_back(ans_key);
