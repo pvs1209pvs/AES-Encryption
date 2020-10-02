@@ -4,13 +4,14 @@
 #include <vector>
 #include <map>
 
-#define BLOCK_SIZE 128
+#include "Configuration.h"
 
 class AES {
 
 private:
     unsigned int **key;
     unsigned int **msg;
+    Configuration config;
 
     unsigned int **key_gen(unsigned int **parent_key, int round_number);
 
@@ -18,10 +19,11 @@ private:
 
     void rot_word(unsigned int *&col);
 
-public:
-    AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m);
 
-    AES(unsigned int **k, const std::vector<unsigned int> &m);
+public:
+    AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m, Configuration cfg);
+
+    AES(unsigned int **k, const std::vector<unsigned int> &m, Configuration cfg);
 
     AES() = default;
 
@@ -31,16 +33,18 @@ public:
 
     void shift_row_step(unsigned int **arr);
 
-    unsigned int overflow_handle(unsigned int x, unsigned int mix_no);
-    void mul_mixin_consts(unsigned int **arr);
+    void mix_step(unsigned int **arr);
+
+    unsigned int mix_step_helper(unsigned int x, unsigned int mix_no);
 
     unsigned int **add_round_key(unsigned int **a, unsigned int **b);
 
-    unsigned int** round(unsigned int **text, unsigned int **key);
+    unsigned int** round(unsigned int **state, unsigned int **round_key);
 
     unsigned int **get_key();
 
     unsigned int **get_msg();
+
 
 };
 
