@@ -22,12 +22,10 @@ int main(int argc, char *argv[]) {
 
         AES aes(KEY, MESSAGE, Configuration(128, 10));
 
-//        std::cout << hex_mtrx_to_string(aes.get_key()) << std::endl;
-//        std::cout << hex_mtrx_to_string(aes.get_msg()) << std::endl;
-
+        // key expansion
         std::vector<unsigned int **> key_schedule = aes.key_expansion();
 
-
+        // initial round
         unsigned int **state = aes.add_round_key(aes.get_key(), aes.get_msg());
 
         // round 0 t0 9
@@ -42,7 +40,7 @@ int main(int argc, char *argv[]) {
 
         // encrypted text
         std::cout << " " << hex_mtrx_to_string(state) << std::endl;
-
+        // 29c3505f571420f6402299b31a2d73a
 
         return 0;
     }
