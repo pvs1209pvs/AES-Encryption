@@ -7,13 +7,11 @@ std::vector<unsigned int> fread_chars(const std::string &filename);
 
 std::vector<std::string> fread_lines(const std::string &filename, int num_lines);
 
-void fwrite(std::string filename, std::vector<unsigned int>);
+bool fwrite_lines(const std::string &fname, const char *encrypted);
+
+void fwrite_random(const size_t &num_mb);
 
 void col_major_cnstrctn(unsigned int **&state, std::vector<unsigned int> text);
-
-unsigned int **mtrx_multplctn(unsigned int **a, unsigned int **b);
-
-unsigned int **mtrx_xor(unsigned int **a, unsigned int **b);
 
 unsigned int *col_xor(unsigned int *a, unsigned int *b);
 

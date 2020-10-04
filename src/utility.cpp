@@ -11,7 +11,6 @@
  * @param num_bytes Number of bytes to read from the file.
  * @return Vector containing all the ascii text of the file.
  */
-
 std::vector<unsigned int> fread_chars(const std::string &filename) {
 
     std::ifstream file_reader{filename, std::ios::in};
@@ -71,14 +70,15 @@ std::vector<std::string> fread_lines(const std::string &filename, int num_lines)
  * @return boolean which is a confimation flag of success
  *
  * */
-bool fwrite_lines(const std::string &fname, const char *encrypted){
+bool fwrite_lines(const std::string &fname, const char *encrypted) {
 
     int sucessFlag = 0;
-    std::ofstream fileWriter ("EncryptedText.txt");
+    std::ofstream fileWriter("EncryptedText.txt");
 
-    if(fileWriter.is_open()){
+    if (fileWriter.is_open()) {
 
-        fileWriter.write(encrypted, (unsigned)strlen(encrypted));
+
+        fileWriter.write(encrypted, (unsigned) strlen(encrypted));
 
         fileWriter.close();
 
@@ -86,6 +86,25 @@ bool fwrite_lines(const std::string &fname, const char *encrypted){
     }
 
     return sucessFlag;
+}
+
+void fwrite_random(const size_t &num_mb) {
+
+    std::ofstream fwriter{"../src/random_message.txt"};
+
+    if (fwriter.is_open()) {
+
+        srand(time(NULL));
+
+        for (int i = 0; i < num_mb*1024*1024; ++i) {
+            char c = rand() % 94 + 32;
+            fwriter.write(&c, sizeof(char));
+        }
+
+        fwriter.close();
+    } else {
+        std::cout << "fwrite_random error" << std::endl;
+    }
 }
 
 /**
@@ -104,7 +123,6 @@ void col_major_cnstrctn(unsigned int **&state, std::vector<unsigned int> text) {
     }
 
 }
-
 
 
 /**
@@ -164,7 +182,7 @@ void set_col(unsigned int **&state, unsigned int *source_col, int col_number) {
  */
 std::string hex_mtrx_to_string(unsigned int **input) {
 
-    if(input == nullptr){
+    if (input == nullptr) {
         return "nullstate";
     }
 
@@ -180,9 +198,9 @@ std::string hex_mtrx_to_string(unsigned int **input) {
 
 }
 
-unsigned int ** static_to_dynamic(unsigned int source[4][4]){
+unsigned int **static_to_dynamic(unsigned int source[4][4]) {
 
-    unsigned int **result = (unsigned int **) malloc(sizeof(unsigned int*) * 4);
+    unsigned int **result = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
 
     for (int i = 0; i < 4; ++i) {
         result[i] = (unsigned int *) malloc(sizeof(unsigned int) * 4);

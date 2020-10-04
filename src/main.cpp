@@ -1,4 +1,5 @@
 #include <iostream>
+#include <bitset>
 #include "AES.h"
 #include "AESTest.h"
 #include "Table.h"
@@ -6,10 +7,6 @@
 #include "Configuration.h"
 
 int main(int argc, char *argv[]) {
-
-    int x = 7;
-    x = x << 1;
-    //std::cout << std::hex << x << std::endl;
 
     if (argc > 1) {
         return run_tests(argc, argv);
@@ -30,9 +27,22 @@ int main(int argc, char *argv[]) {
 
         std::vector<unsigned int **> key_schedule = aes.key_expansion();
 
+
         unsigned int **state = aes.add_round_key(aes.get_key(), aes.get_msg());
 
-        aes.round(state, key_schedule.at(1));
+        // round 0 t0 9
+        for (int i = 1; i < 10; ++i) {
+            state = aes.round(state, key_schedule.at(i));
+        }
+
+        // last round
+        aes.substitute_step(state);
+        aes.shift_row_step(state);
+        state = aes.add_round_key(state, key_schedule.at(10));
+
+        // encrypted text
+        std::cout << " " << hex_mtrx_to_string(state) << std::endl;
+
 
         return 0;
     }

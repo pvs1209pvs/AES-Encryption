@@ -33,7 +33,7 @@ public:
 
     void shift_row_step(unsigned int **arr);
 
-    void mix_step(unsigned int **arr);
+    void mix_step(unsigned int **&arr);
 
     unsigned int mix_step_helper(unsigned int x, unsigned int mix_no);
 
@@ -44,7 +44,6 @@ public:
     unsigned int **get_key();
 
     unsigned int **get_msg();
-
 
 };
 
