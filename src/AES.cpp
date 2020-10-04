@@ -174,7 +174,6 @@ void AES::mix_step(unsigned int **&arr) {
         }
     }
 
-
     for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < 4; ++j) {
             std::bitset<8> bins[4];
@@ -186,7 +185,6 @@ void AES::mix_step(unsigned int **&arr) {
     }
 
     arr = new_state;
-
 
 }
 
@@ -250,6 +248,29 @@ unsigned int **AES::get_key() {
 
 unsigned int **AES::get_msg() {
     return msg;
+}
+
+unsigned int ** AES::encrypt() {
+
+    // key expansion
+    std::vector<unsigned int **> key_schedule = key_expansion();
+
+    // initial round
+    unsigned int **encrypt_state = add_round_key(get_key(), get_msg());
+
+    // round 0 t0 9
+    for (int i = 1; i < config.NUM_ROUNDS; ++i) {
+        encrypt_state = round(encrypt_state, key_schedule.at(i));
+    }
+
+    // last round
+    substitute_step(encrypt_state);
+    shift_row_step(encrypt_state);
+    encrypt_state = add_round_key(encrypt_state, key_schedule.at(10));
+
+    // encrypted text
+    return encrypt_state;
+
 }
 
 

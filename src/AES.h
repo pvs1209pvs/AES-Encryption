@@ -41,6 +41,8 @@ public:
 
     unsigned int** round(unsigned int **state, unsigned int **round_key);
 
+    unsigned int ** encrypt();
+
     unsigned int **get_key();
 
     unsigned int **get_msg();
