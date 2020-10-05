@@ -88,7 +88,11 @@ bool fwrite_lines(const std::string &fname, const char *encrypted) {
     return sucessFlag;
 }
 
-void fwrite_random(const size_t &num_mb) {
+/**
+ *
+ * @param bit_blocks Number of 128bit blocks.
+ */
+void fwrite_random(const float &bit_blocks) {
 
     std::ofstream fwriter{"../src/random_message.txt"};
 
@@ -96,10 +100,13 @@ void fwrite_random(const size_t &num_mb) {
 
         srand(time(NULL));
 
-        for (int i = 0; i < num_mb*1024*1024; ++i) {
-            char c = rand() % 94 + 32;
-            fwriter.write(&c, sizeof(char));
+        for (int i = 0; i < bit_blocks * 128; ++i) {
+//            char c = rand() % 94 + 32;
+//            fwriter.write(&c, sizeof(char));
+            fwriter << (char) (rand() % 94 + 32);
+
         }
+
 
         fwriter.close();
     } else {

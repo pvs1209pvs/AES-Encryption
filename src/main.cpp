@@ -2,9 +2,7 @@
 #include <bitset>
 #include "AES.h"
 #include "AESTest.h"
-#include "Table.h"
 #include "utility.h"
-#include "Configuration.h"
 
 int main(int argc, char *argv[]) {
 
@@ -18,19 +16,17 @@ int main(int argc, char *argv[]) {
                                        {0x74, 0x79, 0x6e, 0x75}};
 
         unsigned int **KEY = static_to_dynamic(TEST_KEY);
+        std::vector<unsigned int> F_KEY = fread_chars("../src/key.txt");
         std::vector<unsigned int> MESSAGE = fread_chars("../src/message.txt");
 
-        AES aes(KEY, MESSAGE, Configuration(128, 10));
+        init(F_KEY, MESSAGE);
 
-        std::cout << hex_mtrx_to_string(aes.encrypt()) << std::endl;
+        fwrite_random(15);
+
+        std::cout << hex_mtrx_to_string(encrypt()) << std::endl;
         // 29c3505f571420f6402299b31a2d73a
 
         return 0;
     }
 
-
 }
-
-// msg = my name is paramvir singh.
-// key = javajavajava
-// cipher = 8B92802C131422122999E39B713CB4B12E8C646410A03C63534F79A386004C04

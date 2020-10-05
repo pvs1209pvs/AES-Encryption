@@ -9,7 +9,7 @@ std::vector<std::string> fread_lines(const std::string &filename, int num_lines)
 
 bool fwrite_lines(const std::string &fname, const char *encrypted);
 
-void fwrite_random(const size_t &num_mb);
+void fwrite_random(const float &bit_blocks);
 
 void col_major_cnstrctn(unsigned int **&state, std::vector<unsigned int> text);
 

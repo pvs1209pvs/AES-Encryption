@@ -5,7 +5,16 @@
 #include "utility.h"
 #include "Table.h"
 
-AES::AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m, Configuration cfg) : config(cfg) {
+unsigned int **key;
+unsigned int **msg;
+
+/**
+ * Initializes the key and message.
+ *
+ * @param k Key for encryption.
+ * @param m Plain text to be encrypted.
+ */
+void init(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m) {
 
     key = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
     msg = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
@@ -20,8 +29,16 @@ AES::AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m,
 
 }
 
-AES::AES(unsigned int **k, const std::vector<unsigned int> &m, Configuration cfg) : key{k}, config(cfg) {
 
+/**
+ * Initializes the key and message.
+ *
+ * @param k Key for encryption.
+ * @param m Plain text to be encrypted.
+ */
+void init(unsigned int **&k, const std::vector<unsigned int> &m) {
+
+    key = k;
     msg = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
 
     for (int i = 0; i < 4; ++i) {
@@ -38,7 +55,7 @@ AES::AES(unsigned int **k, const std::vector<unsigned int> &m, Configuration cfg
  *
  * @return User key and keys for each round.
  */
-std::vector<unsigned int **> AES::key_expansion() {
+std::vector<unsigned int **> key_expansion() {
 
     std::vector<unsigned int **> round_keys{};
 
@@ -52,6 +69,7 @@ std::vector<unsigned int **> AES::key_expansion() {
 
 }
 
+
 /**
  * Generates next round-key from the last round-key.
  *
@@ -59,7 +77,7 @@ std::vector<unsigned int **> AES::key_expansion() {
  * @param round_number Round number.
  * @return Round-key for the next round.
  */
-unsigned int **AES::key_gen(unsigned int **parent_key, int round_number) {
+unsigned int **key_gen(unsigned int **parent_key, int round_number) {
 
     unsigned int **round_key = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
     for (int i = 0; i < 4; ++i) {
@@ -86,32 +104,35 @@ unsigned int **AES::key_gen(unsigned int **parent_key, int round_number) {
 
 }
 
+
 /**
  * Rotate the word upwards/leftwards.
  *
- * @param col word to be rotated upwards/leftwards.
+ * @param col Column to be rotated upwards/leftwards.
  */
-void AES::rot_word(unsigned int *&col) {
+void rot_word(unsigned int *&col) {
     std::rotate(&col[0], &col[0] + 1, &col[4]);
 }
 
+
 /**
- * Performs sbox substitution.
+ * Substitution on a column of the state matrix.
  *
- * @param col Word on which sbox substitution needs be carried out.
+ * @param col Col of state matrix that needs to be substituted.
  */
-void AES::sub_bytes(unsigned int *&col) {
+void sub_bytes(unsigned int *&col) {
     for (int i = 0; i < 4; ++i) {
         col[i] = sbox[col[i]];
     }
 }
 
+
 /**
- * Performs subsitution step on whole year
+ * Substitution of the state matrix.
  *
- * @param array which where this step will be performed
+ * @param arr State matrix that needs to be substituted.
  */
-void AES::substitute_step(unsigned int **arr) {
+void substitute_step(unsigned int **arr) {
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
             arr[i][j] = sbox[arr[i][j]];
@@ -121,11 +142,11 @@ void AES::substitute_step(unsigned int **arr) {
 
 
 /**
- * Performs rotation step on whole array
+ * Shifts the state matrix.
  *
- * @param array which where this step will be performed
+ * @param arr State matrix that needs to be shifted.
  */
-void AES::shift_row_step(unsigned int **arr) {
+void shift_row_step(unsigned int **arr) {
     for (int i = 0; i < 4; i++) {
         std::rotate(&arr[i][0], &arr[i][0] + i, &arr[i][4]);
     }
@@ -133,11 +154,12 @@ void AES::shift_row_step(unsigned int **arr) {
 
 
 /**
- * performs Key rounding step of AES
- * @param array 'a' and array 'b'
- * @return XOR of 'a' and 'b'
+ * Add rounds key.
+ * @param a State matrix.
+ * @param b Key matrix.
+ * @return XOR of state and key matrix.
  */
-unsigned int **AES::add_round_key(unsigned int **a, unsigned int **b) {
+unsigned int **add_round_key(unsigned int **a, unsigned int **b) {
 
     unsigned int **result = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
 
@@ -155,13 +177,14 @@ unsigned int **AES::add_round_key(unsigned int **a, unsigned int **b) {
 
 }
 
+
 /**
- * Performs Mixing step of AES
+ * Mixcolumn for encryption.
  *
- * @param array on which mixing needs to be performed
+ * @param arr State matrix on which mixcolumn needs to be performed.
  *
  * */
-void AES::mix_step(unsigned int **&arr) {
+void mix_step(unsigned int **&arr) {
 
     unsigned int **new_state = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
     for (int i = 0; i < 4; ++i) {
@@ -188,13 +211,15 @@ void AES::mix_step(unsigned int **&arr) {
 
 }
 
+
 /**
- * Performs core functions of mixing step
+ * Performs galois field multiplication for mix-column.
  *
- * @param first int to perform calculations
- * @param second int perform calculations
+ * @param mix_no Constant from the mix-column table.
+ * @param x Value from the state matrix.
+ * @return result of galois field multiplication.
  */
-unsigned int AES::mix_step_helper(unsigned int mix_no, unsigned int x) {
+unsigned int mix_step_helper(unsigned int mix_no, unsigned int x) {
 
     unsigned int result = x;
 
@@ -225,12 +250,14 @@ unsigned int AES::mix_step_helper(unsigned int mix_no, unsigned int x) {
     return result;
 }
 
+
 /**
- * one complete round of AES encryption
- * @param state on which round will be ran
- * @param key to use for current round number
+ * One complete round of AES encryption.
+ *
+ * @param state on which round will be performed.
+ * @param round_key Key for the round.
  */
-unsigned int **AES::round(unsigned int **state, unsigned int **round_key) {
+unsigned int **round(unsigned int **state, unsigned int **round_key) {
 
     substitute_step(state);
     shift_row_step(state);
@@ -242,24 +269,21 @@ unsigned int **AES::round(unsigned int **state, unsigned int **round_key) {
 }
 
 
-unsigned int **AES::get_key() {
-    return key;
-}
-
-unsigned int **AES::get_msg() {
-    return msg;
-}
-
-unsigned int ** AES::encrypt() {
+/**
+ * Encrypts the plain text.
+ *
+ * @return encrypted text.
+ */
+unsigned int **encrypt() {
 
     // key expansion
     std::vector<unsigned int **> key_schedule = key_expansion();
 
     // initial round
-    unsigned int **encrypt_state = add_round_key(get_key(), get_msg());
+    unsigned int **encrypt_state = add_round_key(key, msg);
 
     // round 0 t0 9
-    for (int i = 1; i < config.NUM_ROUNDS; ++i) {
+    for (int i = 1; i < 10; ++i) {
         encrypt_state = round(encrypt_state, key_schedule.at(i));
     }
 
@@ -272,8 +296,3 @@ unsigned int ** AES::encrypt() {
     return encrypt_state;
 
 }
-
-
-
-
-

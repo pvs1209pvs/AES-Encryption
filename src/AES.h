@@ -3,49 +3,30 @@
 #include <string>
 #include <vector>
 #include <map>
-
 #include "Configuration.h"
 
-class AES {
+unsigned int **key_gen(unsigned int **parent_key, int round_number);
 
-private:
-    unsigned int **key;
-    unsigned int **msg;
-    Configuration config;
+void sub_bytes(unsigned int *&col);
 
-    unsigned int **key_gen(unsigned int **parent_key, int round_number);
+void rot_word(unsigned int *&col);
 
-    void sub_bytes(unsigned int *&col);
+void init(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m);
 
-    void rot_word(unsigned int *&col);
+void init(unsigned int **&k, const std::vector<unsigned int> &m);
 
+std::vector<unsigned int **> key_expansion();
 
-public:
-    AES(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m, Configuration cfg);
+void substitute_step(unsigned int **arr);
 
-    AES(unsigned int **k, const std::vector<unsigned int> &m, Configuration cfg);
+void shift_row_step(unsigned int **arr);
 
-    AES() = default;
+void mix_step(unsigned int **&arr);
 
-    std::vector<unsigned int **> key_expansion();
+unsigned int mix_step_helper(unsigned int x, unsigned int mix_no);
 
-    void substitute_step(unsigned int **arr);
+unsigned int **add_round_key(unsigned int **a, unsigned int **b);
 
-    void shift_row_step(unsigned int **arr);
+unsigned int **round(unsigned int **state, unsigned int **round_key);
 
-    void mix_step(unsigned int **&arr);
-
-    unsigned int mix_step_helper(unsigned int x, unsigned int mix_no);
-
-    unsigned int **add_round_key(unsigned int **a, unsigned int **b);
-
-    unsigned int** round(unsigned int **state, unsigned int **round_key);
-
-    unsigned int ** encrypt();
-
-    unsigned int **get_key();
-
-    unsigned int **get_msg();
-
-};
-
+unsigned int **encrypt();
