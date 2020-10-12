@@ -5,8 +5,10 @@
 #include "utility.h"
 #include "Table.h"
 
-unsigned int **key;
-unsigned int **msg;
+unsigned int **key{};
+unsigned int **msg{};
+int N{0};
+int ROUNDS{};
 
 /**
  * Initializes the key and message.
@@ -14,14 +16,19 @@ unsigned int **msg;
  * @param k Key for encryption.
  * @param m Plain text to be encrypted.
  */
-void init(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m) {
+void init(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m, const std::string &type) {
 
-    key = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
-    msg = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
+    if (type == "128") {
+        N = 4;
+        ROUNDS = 10;
+    }
 
-    for (int i = 0; i < 4; ++i) {
-        key[i] = (unsigned int *) malloc(sizeof(unsigned int *) * 4);
-        msg[i] = (unsigned int *) malloc(sizeof(unsigned int *) * 4);
+    key = (unsigned int **) malloc(sizeof(unsigned int *) * N);
+    msg = (unsigned int **) malloc(sizeof(unsigned int *) * N);
+
+    for (int i = 0; i < N; ++i) {
+        key[i] = (unsigned int *) malloc(sizeof(unsigned int *) * N);
+        msg[i] = (unsigned int *) malloc(sizeof(unsigned int *) * N);
     }
 
     col_major_cnstrctn(key, k);
@@ -39,10 +46,10 @@ void init(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m
 void init(unsigned int **&k, const std::vector<unsigned int> &m) {
 
     key = k;
-    msg = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
+    msg = (unsigned int **) malloc(sizeof(unsigned int *) * N);
 
-    for (int i = 0; i < 4; ++i) {
-        msg[i] = (unsigned int *) malloc(sizeof(unsigned int *) * 4);
+    for (int i = 0; i < N; ++i) {
+        msg[i] = (unsigned int *) malloc(sizeof(unsigned int *) * N);
     }
 
     col_major_cnstrctn(msg, m);
@@ -61,7 +68,7 @@ std::vector<unsigned int **> key_expansion() {
 
     round_keys.push_back(key);
 
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < ROUNDS; ++i) {
         round_keys.push_back(key_gen(round_keys.at(i), i));
     }
 
@@ -79,13 +86,13 @@ std::vector<unsigned int **> key_expansion() {
  */
 unsigned int **key_gen(unsigned int **parent_key, int round_number) {
 
-    unsigned int **round_key = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
-    for (int i = 0; i < 4; ++i) {
-        round_key[i] = (unsigned int *) malloc(sizeof(unsigned int) * 4);
+    unsigned int **round_key = (unsigned int **) malloc(sizeof(unsigned int *) * N);
+    for (int i = 0; i < N; ++i) {
+        round_key[i] = (unsigned int *) malloc(sizeof(unsigned int) * N);
     }
 
     // rotates the last column from the parent key in the upwards/left direction
-    unsigned int *last_col = get_col(parent_key, 3);
+    unsigned int *last_col = get_col(parent_key, N - 1);
     rot_word(last_col);
 
     // substitution from the sbox table
@@ -96,7 +103,7 @@ unsigned int **key_gen(unsigned int **parent_key, int round_number) {
     set_col(round_key, col_xor(rcon[round_number], col_xor(get_col(parent_key, 0), last_col)), 0);
 
     // 1,2,3 col of round key
-    for (int i = 1; i < 4; ++i) {
+    for (int i = 1; i < N; ++i) {
         set_col(round_key, col_xor(get_col(round_key, i - 1), get_col(parent_key, i)), i);
     }
 
@@ -111,7 +118,7 @@ unsigned int **key_gen(unsigned int **parent_key, int round_number) {
  * @param col Column to be rotated upwards/leftwards.
  */
 void rot_word(unsigned int *&col) {
-    std::rotate(&col[0], &col[0] + 1, &col[4]);
+    std::rotate(&col[0], &col[0] + 1, &col[N]);
 }
 
 
@@ -120,8 +127,8 @@ void rot_word(unsigned int *&col) {
  *
  * @param col Col of state matrix that needs to be substituted.
  */
-void sub_bytes(unsigned int *&col) {
-    for (int i = 0; i < 4; ++i) {
+void sub_bytes(unsigned int *const &col) {
+    for (int i = 0; i < N; ++i) {
         col[i] = sbox[col[i]];
     }
 }
@@ -132,9 +139,9 @@ void sub_bytes(unsigned int *&col) {
  *
  * @param arr State matrix that needs to be substituted.
  */
-void substitute_step(unsigned int **arr) {
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
+void substitute_step(unsigned int **const &arr) {
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
             arr[i][j] = sbox[arr[i][j]];
         }
     }
@@ -146,9 +153,9 @@ void substitute_step(unsigned int **arr) {
  *
  * @param arr State matrix that needs to be shifted.
  */
-void shift_row_step(unsigned int **arr) {
-    for (int i = 0; i < 4; i++) {
-        std::rotate(&arr[i][0], &arr[i][0] + i, &arr[i][4]);
+void shift_row_step(unsigned int **const &arr) {
+    for (int i = 0; i < N; i++) {
+        std::rotate(&arr[i][0], &arr[i][0] + i, &arr[i][N]);
     }
 }
 
@@ -159,16 +166,16 @@ void shift_row_step(unsigned int **arr) {
  * @param b Key matrix.
  * @return XOR of state and key matrix.
  */
-unsigned int **add_round_key(unsigned int **a, unsigned int **b) {
+unsigned int **add_round_key( unsigned int **const &a,  unsigned int **const &b) {
 
-    unsigned int **result = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
+    unsigned int **result = (unsigned int **) malloc(sizeof(unsigned int *) * N);
 
-    for (int i = 0; i < 4; ++i) {
-        result[i] = (unsigned int *) malloc(sizeof(unsigned int) * 4);
+    for (int i = 0; i < N; ++i) {
+        result[i] = (unsigned int *) malloc(sizeof(unsigned int) * N);
     }
 
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
+    for (int i = 0; i < N; ++i) {
+        for (int j = 0; j < N; ++j) {
             result[i][j] = a[i][j] ^ b[i][j];
         }
     }
@@ -184,24 +191,24 @@ unsigned int **add_round_key(unsigned int **a, unsigned int **b) {
  * @param arr State matrix on which mixcolumn needs to be performed.
  *
  * */
-void mix_step(unsigned int **&arr) {
+void mix_step(unsigned int ** &arr) {
 
-    unsigned int **new_state = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
-    for (int i = 0; i < 4; ++i) {
-        new_state[i] = (unsigned int *) malloc(sizeof(unsigned int) * 4);
+    unsigned int **new_state = (unsigned int **) malloc(sizeof(unsigned int *) * N);
+    for (int i = 0; i < N; ++i) {
+        new_state[i] = (unsigned int *) malloc(sizeof(unsigned int) * N);
     }
 
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
+    for (int i = 0; i < N; ++i) {
+        for (int j = 0; j < N; ++j) {
             new_state[j][i] = 0x0;
         }
     }
 
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
-            std::bitset<8> bins[4];
-            for (int k = 0; k < 4; ++k) {
-                bins[k] = std::bitset<8>{mix_step_helper(mix[i][k], arr[k][j])};
+    for (int i = 0; i < N; ++i) {
+        for (int j = 0; j < N; ++j) {
+            std::bitset<8> bins[N];
+            for (int k = 0; k < N; ++k) {
+                bins[k] = std::bitset<8>{mix_step(mix[i][k], arr[k][j])};
             }
             new_state[i][j] = (unsigned int) ((bins[0] ^ bins[1] ^ bins[2] ^ bins[3]).to_ulong());
         }
@@ -219,7 +226,7 @@ void mix_step(unsigned int **&arr) {
  * @param x Value from the state matrix.
  * @return result of galois field multiplication.
  */
-unsigned int mix_step_helper(unsigned int mix_no, unsigned int x) {
+unsigned int mix_step(const unsigned int &mix_no, const unsigned int &x) {
 
     unsigned int result = x;
 
@@ -283,14 +290,14 @@ unsigned int **encrypt() {
     unsigned int **encrypt_state = add_round_key(key, msg);
 
     // round 0 t0 9
-    for (int i = 1; i < 10; ++i) {
+    for (int i = 1; i < ROUNDS; ++i) {
         encrypt_state = round(encrypt_state, key_schedule.at(i));
     }
 
     // last round
     substitute_step(encrypt_state);
     shift_row_step(encrypt_state);
-    encrypt_state = add_round_key(encrypt_state, key_schedule.at(10));
+    encrypt_state = add_round_key(encrypt_state, key_schedule.at(ROUNDS));
 
     // encrypted text
     return encrypt_state;

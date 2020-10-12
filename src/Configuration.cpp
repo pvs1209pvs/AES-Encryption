@@ -1,4 +1,11 @@
 #include "Configuration.h"
 
-Configuration::Configuration(int p_block_size_bits, int p_num_rounds) : BLOCK_SIZE(p_block_size_bits), NUM_ROUNDS(p_num_rounds){
+Configuration::Configuration(int p_block_size_bits) : BLOCK_SIZE(p_block_size_bits){
+    switch (p_block_size_bits) {
+        case 128:{
+            N = 4;
+            NUM_ROUNDS = 10;
+            break;
+        }
+    }
 }

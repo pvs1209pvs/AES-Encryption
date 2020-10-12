@@ -4,8 +4,9 @@ struct Configuration{
 
     int BLOCK_SIZE;
     int NUM_ROUNDS;
+    int N;
 
     Configuration() = default;
-    Configuration(int p_block_size_bits, int p_num_rounds);
+    Configuration(int p_block_size_bits);
 
 };
