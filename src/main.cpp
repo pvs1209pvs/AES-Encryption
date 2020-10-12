@@ -6,18 +6,11 @@
 
 int main(int argc, char *argv[]) {
 
-
     if (argc > 1) {
         return run_tests(argc, argv);
     } else {
-
-
-        std::vector<unsigned int> KEY = fread_chars("../src/key.txt");
-        std::vector<unsigned int> MESSAGE = fread_chars("../src/message.txt");
-
-        init(KEY, MESSAGE, "128");
-        encrypt();
-
+        init(fread_chars("../src/key.txt"), fread_chars("../src/message.txt"), "128");
+        std::cout << "Encrypted text " << hex_mtrx_to_string(encrypt()) << std::endl;
         return 0;
     }
 
