@@ -42,20 +42,18 @@ std::vector<unsigned int> fread_chars(const std::string &filename) {
 std::vector<std::vector<unsigned int>> fread_lines(const std::string &filename) {
 
     std::vector<unsigned int> text;
-    std::vector<std::vector<unsigned int>> blockText;
+    std::vector<std::vector<unsigned int>> block_text;
     std::ifstream infile{filename, std::ios::in};
 
     if (infile.is_open()) {
 
-
         while (!infile.eof()){
             text.push_back((unsigned int) infile.get());
             if(text.size()==16){
-                blockText.push_back(text);
+                block_text.push_back(text);
                 text.clear();
             }
         }
-
 
         infile.close();
 
@@ -64,7 +62,7 @@ std::vector<std::vector<unsigned int>> fread_lines(const std::string &filename) 
         exit(1);
     }
 
-    return blockText;
+    return block_text;
 
 }
 
