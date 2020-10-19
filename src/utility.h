@@ -5,9 +5,9 @@
 
 std::vector<unsigned int> fread_chars(const std::string &filename);
 
-std::vector<std::string> fread_lines(const std::string &filename, int num_lines);
+std::vector<std::vector<unsigned int>> fread_lines(const std::string &filename);
 
-bool fwrite_lines(const std::string &fname, const char *encrypted);
+bool fwrite_lines(const std::string &fname, std::string encrypted);
 
 void fwrite_random(const float &bit_blocks);
 

@@ -39,18 +39,23 @@ std::vector<unsigned int> fread_chars(const std::string &filename) {
 
 }
 
-std::vector<std::string> fread_lines(const std::string &filename, int num_lines) {
+std::vector<std::vector<unsigned int>> fread_lines(const std::string &filename) {
 
-    std::vector<std::string> keys;
+    std::vector<unsigned int> text;
+    std::vector<std::vector<unsigned int>> blockText;
     std::ifstream infile{filename, std::ios::in};
 
     if (infile.is_open()) {
 
-        for (int i = 0; i < num_lines; ++i) {
-            std::string ans_key{};
-            std::getline(infile, ans_key);
-            keys.push_back(ans_key);
+
+        while (!infile.eof()){
+            text.push_back((unsigned int) infile.get());
+            if(text.size()==16){
+                blockText.push_back(text);
+                text.clear();
+            }
         }
+
 
         infile.close();
 
@@ -59,7 +64,7 @@ std::vector<std::string> fread_lines(const std::string &filename, int num_lines)
         exit(1);
     }
 
-    return keys;
+    return blockText;
 
 }
 
@@ -70,15 +75,15 @@ std::vector<std::string> fread_lines(const std::string &filename, int num_lines)
  * @return boolean which is a confimation flag of success
  *
  * */
-bool fwrite_lines(const std::string &fname, const char *encrypted) {
+bool fwrite_lines(const std::string &fname, std::string encrypted) {
 
     int sucessFlag = 0;
-    std::ofstream fileWriter("EncryptedText.txt");
+    std::ofstream fileWriter(fname, std::ios::app);
 
     if (fileWriter.is_open()) {
 
 
-        fileWriter.write(encrypted, (unsigned) strlen(encrypted));
+        fileWriter << encrypted ;
 
         fileWriter.close();
 

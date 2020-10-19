@@ -69,6 +69,7 @@ void init(unsigned int **&k, const std::vector<unsigned int> &m) {
 }
 
 
+
 /**
  * Creates round key for each round.
  *
