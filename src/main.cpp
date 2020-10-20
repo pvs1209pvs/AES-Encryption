@@ -1,3 +1,4 @@
+#include <iostream>
 #include "AES.h"
 #include "utility.h"
 
@@ -10,6 +11,8 @@ int main() {
             init(key, text, "128");
             fwrite_lines( "../src/encryptedText.txt" , hex_mtrx_to_string(encrypt()));
         }
+
+        std::cout << "Text message encrypted, check encrypted.txt for the encrypted text." << std::endl;
 
         return 0;
 
