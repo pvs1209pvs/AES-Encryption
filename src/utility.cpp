@@ -1,8 +1,8 @@
-#include "utility.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <cstring>
+#include "utility.h"
 #include "AES.h"
 
 /**
@@ -47,9 +47,10 @@ std::vector<std::vector<unsigned int>> fread_lines(const std::string &filename) 
 
     if (infile.is_open()) {
 
-        while (!infile.eof()){
-            text.push_back((unsigned int) infile.get());
-            if(text.size()==16){
+        while (!infile.eof()) {
+            unsigned int r = (unsigned int) infile.get();
+            text.push_back(r);
+            if (text.size() == 128) {
                 block_text.push_back(text);
                 text.clear();
             }
@@ -79,12 +80,8 @@ bool fwrite_lines(const std::string &fname, std::string encrypted) {
     std::ofstream fileWriter(fname, std::ios::app);
 
     if (fileWriter.is_open()) {
-
-
-        fileWriter << encrypted ;
-
+        fileWriter << encrypted;
         fileWriter.close();
-
         sucessFlag = 1;
     }
 
@@ -95,7 +92,7 @@ bool fwrite_lines(const std::string &fname, std::string encrypted) {
  *
  * @param bit_blocks Number of 128bit blocks.
  */
-void fwrite_random(const float &bit_blocks) {
+void fwrite_random(const int &bit_blocks, const int &block_size) {
 
     std::ofstream fwriter{"../src/random_message.txt"};
 
@@ -103,15 +100,15 @@ void fwrite_random(const float &bit_blocks) {
 
         srand(time(NULL));
 
-        for (int i = 0; i < bit_blocks * 128; ++i) {
-//            char c = rand() % 94 + 32;
-//            fwriter.write(&c, sizeof(char));
+        for (int i = 1; i <= bit_blocks * block_size; ++i) {
             fwriter << (char) (rand() % 94 + 32);
-
+            if (i % bit_blocks == 0) {
+              //  fwriter << '\n';
+            }
         }
 
-
         fwriter.close();
+
     } else {
         std::cout << "fwrite_random error" << std::endl;
     }
@@ -159,7 +156,7 @@ unsigned int *col_xor(unsigned int *a, unsigned int *b) {
  * @param col_number Column number that needs to be added.
  * @return Column of the input matrix.
  */
-unsigned int *get_col( unsigned int **state,  int col_number) {
+unsigned int *get_col(unsigned int **state, int col_number) {
 
     unsigned int *col = (unsigned int *) malloc(sizeof(unsigned int) * N);
 
@@ -219,7 +216,7 @@ unsigned int **static_to_dynamic(unsigned int source[4][4]) {
         for (int j = 0; j < N; ++j) {
             result[i][j] = source[i][j];
         }
-    } 
+    }
 
     return result;
 

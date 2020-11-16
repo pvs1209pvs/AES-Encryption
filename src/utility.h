@@ -7,9 +7,10 @@ std::vector<unsigned int> fread_chars(const std::string &filename);
 
 std::vector<std::vector<unsigned int>> fread_lines(const std::string &filename);
 
+// TODO write the output in char representation or in 64 base.
 bool fwrite_lines(const std::string &fname, std::string encrypted);
 
-void fwrite_random(const float &bit_blocks);
+void fwrite_random(const int &bit_blocks, const int &block_size);
 
 void col_major_cnstrctn(unsigned int **&state, std::vector<unsigned int> text);
 
