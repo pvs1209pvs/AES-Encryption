@@ -1,12 +1,13 @@
 #include <algorithm>
 #include <iostream>
 #include <bitset>
+#include <utility>
 #include "AES.h"
 #include "utility.h"
 #include "Table.h"
 
-unsigned int **key{};
-unsigned int **msg{};
+// unsigned int **key{};
+// unsigned int **msg{};
 int N{0};
 int ROUNDS{};
 
@@ -16,10 +17,9 @@ int ROUNDS{};
  * @param k Key for encryption.
  * @param m Plain text to be encrypted.
  */
-void init(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m, const std::string &type) {
+std::pair<unsigned int **, unsigned int **>  init(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m, const std::string &type) {
 
-
-    if (type == "128") {
+    if (type=="128") {
         N = 4;
         ROUNDS = 10;
     }
@@ -35,8 +35,10 @@ void init(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m
        throw std::invalid_argument{"AES-Encryption type must be 128, 192 or 256"};
     }
 
-    key = (unsigned int **) malloc(sizeof(unsigned int *) * N);
-    msg = (unsigned int **) malloc(sizeof(unsigned int *) * N);
+    // allocate key and msg
+
+    unsigned int ** key = (unsigned int **) malloc(sizeof(unsigned int *) * N);
+    unsigned int ** msg = (unsigned int **) malloc(sizeof(unsigned int *) * N);
 
     for (int i = 0; i < N; ++i) {
         key[i] = (unsigned int *) malloc(sizeof(unsigned int *) * N);
@@ -45,6 +47,11 @@ void init(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m
 
     col_major_cnstrctn(key, k);
     col_major_cnstrctn(msg, m);
+
+    std::pair<unsigned int **, unsigned int **> rtn_args{};
+    rtn_args.first = key;
+    rtn_args.second = msg;
+    return rtn_args;
 
 }
 
@@ -57,14 +64,14 @@ void init(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m
  */
 void init(unsigned int **&k, const std::vector<unsigned int> &m) {
 
-    key = k;
-    msg = (unsigned int **) malloc(sizeof(unsigned int *) * N);
+    // key = k;
+    // msg = (unsigned int **) malloc(sizeof(unsigned int *) * N);
 
-    for (int i = 0; i < N; ++i) {
-        msg[i] = (unsigned int *) malloc(sizeof(unsigned int *) * N);
-    }
+    // for (int i = 0; i < N; ++i) {
+    //     msg[i] = (unsigned int *) malloc(sizeof(unsigned int *) * N);
+    // }
 
-    col_major_cnstrctn(msg, m);
+    // col_major_cnstrctn(msg, m);
 
 }
 
@@ -75,7 +82,7 @@ void init(unsigned int **&k, const std::vector<unsigned int> &m) {
  *
  * @return User key and keys for each round.
  */
-std::vector<unsigned int **> key_expansion() {
+std::vector<unsigned int **> key_expansion(unsigned int ** key) {
 
     std::vector<unsigned int **> round_keys{};
 
@@ -294,10 +301,10 @@ unsigned int **round(unsigned int **state, unsigned int **round_key) {
  *
  * @return encrypted text.
  */
-unsigned int **encrypt() {
+unsigned int **encrypt(unsigned int ** key, unsigned int ** msg) {
 
     // key expansion
-    std::vector<unsigned int **> key_schedule = key_expansion();
+    std::vector<unsigned int **> key_schedule = key_expansion(key);
 
     // initial round
     unsigned int **encrypt_state = add_round_key(key, msg);

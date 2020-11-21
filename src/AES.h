@@ -8,7 +8,7 @@
 extern int N;
 extern int ROUNDS;
 
-void init(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m, const std::string &type);
+std::pair<unsigned int **, unsigned int **> init(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m, const std::string &type);
 
 void init(unsigned int **&k, const std::vector<unsigned int> &m);
 
@@ -18,7 +18,7 @@ unsigned int **key_gen(unsigned int **parent_key, int round_number);
 
 void rot_word(unsigned int *&col);
 
-std::vector<unsigned int **> key_expansion();
+std::vector<unsigned int **> key_expansion(unsigned int ** key);
 
 void substitute_step(unsigned int **const &arr);
 
@@ -32,4 +32,4 @@ unsigned int **add_round_key(const unsigned int **const &a, const unsigned int *
 
 unsigned int **round(unsigned int **state, unsigned int **round_key);
 
-unsigned int **encrypt();
+unsigned int **encrypt(unsigned int ** key, unsigned int ** msg);
