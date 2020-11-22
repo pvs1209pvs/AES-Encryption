@@ -124,7 +124,7 @@ void col_major_cnstrctn(unsigned int **&state, std::vector<unsigned int> text) {
     int text_pntr = 0;
 
     for (int i = 0; i < N; ++i) {
-        for (int j = 0; j < N; ++j) {
+        for (int j = 0; j < 4; ++j) {
             state[j][i] = text.at(text_pntr++);
         }
     }
@@ -140,9 +140,9 @@ void col_major_cnstrctn(unsigned int **&state, std::vector<unsigned int> text) {
  */
 unsigned int *col_xor(unsigned int *a, unsigned int *b) {
 
-    unsigned int *result = (unsigned int *) malloc(sizeof(unsigned int) * N);
+    unsigned int *result = (unsigned int *) malloc(sizeof(unsigned int) * 4);
 
-    for (int i = 0; i < N; ++i) {
+    for (int i = 0; i < 4; ++i) {
         result[i] = a[i] ^ b[i];
     }
 
@@ -158,9 +158,9 @@ unsigned int *col_xor(unsigned int *a, unsigned int *b) {
  */
 unsigned int *get_col(unsigned int **state, int col_number) {
 
-    unsigned int *col = (unsigned int *) malloc(sizeof(unsigned int) * N);
+    unsigned int *col = (unsigned int *) malloc(sizeof(unsigned int) * 4);
 
-    for (int i = 0; i < N; ++i) {
+    for (int i = 0; i < 4; ++i) {
         col[i] = state[i][col_number];
     }
 
@@ -176,7 +176,7 @@ unsigned int *get_col(unsigned int **state, int col_number) {
  */
 void set_col(unsigned int **&state, unsigned int *source_col, int col_number) {
 
-    for (int i = 0; i < N; ++i) {
+    for (int i = 0; i < 4; ++i) {
         state[i][col_number] = source_col[i];
     }
 
@@ -193,12 +193,16 @@ std::string hex_mtrx_to_string(unsigned int **input) {
         return "nullstate";
     }
 
-    std::stringstream ss;
+    std::cout << "cool" << std::endl;
 
-    for (int i = 0; i < N; ++i) {
+    std::stringstream ss{};
+
+    for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < N; ++j) {
-            ss << std::hex << input[j][i];
+            std::cout << i << "," << j << " ";
+            //ss << std::hex << input[i][j];
         }
+        std::cout << std::endl;
     }
 
     return ss.str();
@@ -207,13 +211,13 @@ std::string hex_mtrx_to_string(unsigned int **input) {
 
 unsigned int **static_to_dynamic(unsigned int source[4][4]) {
 
-    unsigned int **result = (unsigned int **) malloc(sizeof(unsigned int *) * N);
+    unsigned int **result = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
 
-    for (int i = 0; i < N; ++i) {
+    for (int i = 0; i < 4; ++i) {
         result[i] = (unsigned int *) malloc(sizeof(unsigned int) * N);
     }
     for (int i = 0; i < N; ++i) {
-        for (int j = 0; j < N; ++j) {
+        for (int j = 0; j < 4; ++j) {
             result[i][j] = source[i][j];
         }
     }

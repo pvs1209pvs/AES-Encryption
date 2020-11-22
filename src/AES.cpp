@@ -9,7 +9,7 @@
 // unsigned int **key{};
 // unsigned int **msg{};
 int N{0};
-int ROUNDS{};
+int ROUNDS{0};
 
 /**
  * Initializes the key and message.
@@ -37,10 +37,10 @@ std::pair<unsigned int **, unsigned int **>  init(const std::vector<unsigned int
 
     // allocate key and msg
 
-    unsigned int ** key = (unsigned int **) malloc(sizeof(unsigned int *) * N);
-    unsigned int ** msg = (unsigned int **) malloc(sizeof(unsigned int *) * N);
+    unsigned int ** key = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
+    unsigned int ** msg = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
 
-    for (int i = 0; i < N; ++i) {
+    for (int i = 0; i < 4; ++i) {
         key[i] = (unsigned int *) malloc(sizeof(unsigned int *) * N);
         msg[i] = (unsigned int *) malloc(sizeof(unsigned int *) * N);
     }
@@ -106,8 +106,8 @@ std::vector<unsigned int **> key_expansion(unsigned int ** key) {
  */
 unsigned int **key_gen(unsigned int **parent_key, int round_number) {
 
-    unsigned int **round_key = (unsigned int **) malloc(sizeof(unsigned int *) * N);
-    for (int i = 0; i < N; ++i) {
+    unsigned int **round_key = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
+    for (int i = 0; i < 4; ++i) {
         round_key[i] = (unsigned int *) malloc(sizeof(unsigned int) * N);
     }
 
@@ -122,7 +122,7 @@ unsigned int **key_gen(unsigned int **parent_key, int round_number) {
     // parent key ^ round key ^ rcon
     set_col(round_key, col_xor(rcon[round_number], col_xor(get_col(parent_key, 0), last_col)), 0);
 
-    // 1,2,3 col of round key
+    // 1..n col of round key
     for (int i = 1; i < N; ++i) {
         set_col(round_key, col_xor(get_col(round_key, i - 1), get_col(parent_key, i)), i);
     }
@@ -160,7 +160,7 @@ void sub_bytes(unsigned int *const &col) {
  * @param arr State matrix that needs to be substituted.
  */
 void substitute_step(unsigned int **const &arr) {
-    for (int i = 0; i < N; i++) {
+    for (int i = 0; i < 4; i++) {
         for (int j = 0; j < N; j++) {
             arr[i][j] = sbox[arr[i][j]];
         }
@@ -174,7 +174,10 @@ void substitute_step(unsigned int **const &arr) {
  * @param arr State matrix that needs to be shifted.
  */
 void shift_row_step(unsigned int **const &arr) {
-    for (int i = 0; i < N; i++) {
+    /**
+     * TODO: check if rows are shifted?
+     */
+    for (int i = 0; i < 4; i++) {
         std::rotate(&arr[i][0], &arr[i][0] + i, &arr[i][N]);
     }
 }
@@ -188,13 +191,13 @@ void shift_row_step(unsigned int **const &arr) {
  */
 unsigned int **add_round_key( unsigned int **const &a,  unsigned int **const &b) {
 
-    unsigned int **result = (unsigned int **) malloc(sizeof(unsigned int *) * N);
+    unsigned int **result = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
 
-    for (int i = 0; i < N; ++i) {
+    for (int i = 0; i < 4; ++i) {
         result[i] = (unsigned int *) malloc(sizeof(unsigned int) * N);
     }
 
-    for (int i = 0; i < N; ++i) {
+    for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < N; ++j) {
             result[i][j] = a[i][j] ^ b[i][j];
         }
@@ -213,21 +216,21 @@ unsigned int **add_round_key( unsigned int **const &a,  unsigned int **const &b)
  * */
 void mix_step(unsigned int ** &arr) {
 
-    unsigned int **new_state = (unsigned int **) malloc(sizeof(unsigned int *) * N);
-    for (int i = 0; i < N; ++i) {
+    unsigned int **new_state = (unsigned int **) malloc(sizeof(unsigned int *) * 4);
+    for (int i = 0; i < 4; ++i) {
         new_state[i] = (unsigned int *) malloc(sizeof(unsigned int) * N);
     }
 
     for (int i = 0; i < N; ++i) {
-        for (int j = 0; j < N; ++j) {
+        for (int j = 0; j < 4; ++j) {
             new_state[j][i] = 0x0;
         }
     }
 
-    for (int i = 0; i < N; ++i) {
+    for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < N; ++j) {
-            std::bitset<8> bins[N];
-            for (int k = 0; k < N; ++k) {
+            std::bitset<8> bins[4];
+            for (int k = 0; k < 4; ++k) {
                 bins[k] = std::bitset<8>{mix_step(mix[i][k], arr[k][j])};
             }
             new_state[i][j] = (unsigned int) ((bins[0] ^ bins[1] ^ bins[2] ^ bins[3]).to_ulong());
@@ -309,7 +312,7 @@ unsigned int **encrypt(unsigned int ** key, unsigned int ** msg) {
     // initial round
     unsigned int **encrypt_state = add_round_key(key, msg);
 
-    // round 0 t0 9
+    // round 0..N-1
     for (int i = 1; i < ROUNDS; ++i) {
         encrypt_state = round(encrypt_state, key_schedule.at(i));
     }
