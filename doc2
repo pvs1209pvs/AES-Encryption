@@ -1,0 +1,17 @@
+Plain text is read in block of 128/192/256 (depending upon the key size). Encryption is carried on the block of text individually. 
+
+Blocks of plain texts are passed to the thread that is ready to execute and the results the saved in-place. Encrypted text message is achieved once all the blocks of texts are available. 
+
+Data-Parallelism was utilised becasuse the same AES encryption was used on different blocks of text. 
+
+Parallel execution was embarringly parallel because no coordination was required amongst threads which led to almost linear speeedups. 
+
+omp parallel for was used to distribute load amongst the threads. 
+
+
+250,000 blocks by 1 thread done in  18.12744
+250,000 blocks by 2 threads done in 15.23534
+
+
+
+double check if speedups were linear. 
