@@ -19,7 +19,6 @@ int main(int argc, char* argv[]) {
     const std::string AES_TYPE = argv[1];
     const int NUM_BLOCKS = std::stoi(argv[2]);
     const int NUM_THREADS = std::stoi(argv[3]);
-    const std::string LIBRARY = argv[4];
 
     // Create a text file
     fwrite_random(std::stoi(AES_TYPE), NUM_BLOCKS);
@@ -29,7 +28,6 @@ int main(int argc, char* argv[]) {
     std::vector<unsigned int> key = fread_chars("../src/key.txt");
    
 
-    if(strcmp(argv[4], "mp")==0){
 
         // Save encrypted blocks in this vector
         std::vector<std::string> encrypted{};
@@ -54,7 +52,7 @@ int main(int argc, char* argv[]) {
         
         std::cout << NUM_BLOCKS  << " blocks by " << NUM_THREADS << " threads done in " << (end-start)  << std::fixed << std::setprecision(5) << std::endl;
    
-    }
+    
 
 
     return 0;
