@@ -1,4 +1,4 @@
-# Install script for directory: /home/pvs/AES-Encryption
+# Install script for directory: /home/paramvirsingh/Desktop/AES-Encryption
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/pvs/AES-Encryption/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/paramvirsingh/Desktop/AES-Encryption/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

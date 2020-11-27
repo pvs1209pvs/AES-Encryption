@@ -54,10 +54,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/pvs/AES-Encryption
+CMAKE_SOURCE_DIR = /home/paramvirsingh/Desktop/AES-Encryption
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/pvs/AES-Encryption/build
+CMAKE_BINARY_DIR = /home/paramvirsingh/Desktop/AES-Encryption/build
 
 #=============================================================================
 # Target rules for target CMakeFiles/AES.dir
@@ -66,7 +66,7 @@ CMAKE_BINARY_DIR = /home/pvs/AES-Encryption/build
 CMakeFiles/AES.dir/all:
 	$(MAKE) -f CMakeFiles/AES.dir/build.make CMakeFiles/AES.dir/depend
 	$(MAKE) -f CMakeFiles/AES.dir/build.make CMakeFiles/AES.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pvs/AES-Encryption/build/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target AES"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/paramvirsingh/Desktop/AES-Encryption/build/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target AES"
 .PHONY : CMakeFiles/AES.dir/all
 
 # Include target in all.
@@ -76,9 +76,9 @@ all: CMakeFiles/AES.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/AES.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/pvs/AES-Encryption/build/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/paramvirsingh/Desktop/AES-Encryption/build/CMakeFiles 6
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/AES.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/pvs/AES-Encryption/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/paramvirsingh/Desktop/AES-Encryption/build/CMakeFiles 0
 .PHONY : CMakeFiles/AES.dir/rule
 
 # Convenience name for target.
