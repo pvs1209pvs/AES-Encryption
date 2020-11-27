@@ -193,16 +193,12 @@ std::string hex_mtrx_to_string(unsigned int **input) {
         return "nullstate";
     }
 
-    std::cout << "cool" << std::endl;
-
     std::stringstream ss{};
 
     for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < N; ++j) {
-            std::cout << i << "," << j << " ";
-            //ss << std::hex << input[i][j];
+            ss << std::hex << input[i][j];
         }
-        std::cout << std::endl;
     }
 
     return ss.str();
