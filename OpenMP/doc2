@@ -1,17 +1,23 @@
-Plain text is read in block of 128/192/256 (depending upon the key size). Encryption is carried on the block of text individually. 
+Plain text is read in block of 128. Encryption is carried on the block of text individually.
 
-Blocks of plain texts are passed to the thread that is ready to execute and the results the saved in-place. Encrypted text message is achieved once all the blocks of texts are available. 
+Blocks of plain texts are passed to the thread that is ready to execute and the results the saved in-place. Encrypted text message is achieved once all the blocks of texts are encrypted.
 
-Data-Parallelism was utilised becasuse the same AES encryption was used on different blocks of text. 
+Data-Parallelism was utilised becasuse the same AES encryption algorithm was used for all the blocks of text.
 
-Parallel execution was embarringly parallel because no coordination was required amongst threads which led to almost linear speeedups. 
+Parallel execution was embarringly parallel because no coordination was required amongst threads.
 
-omp parallel for was used to distribute load amongst the threads. 
+Default scheduling provided the best results.
+
+Problem was faced when deciding how to parallelise the program and making sure the results were saved in-place.
+Solution to the problem was found by dividing the load equally amongst each thread.
+
+There was output dependency between the sub-steps of encryption.
+There was an idea to parallelize sub-steps, but the size of the sub-steps was very small. Overhead of managing the threads overweighed the performace gains, so the ideas was dropped.
 
 
-250,000 blocks by 1 thread done in  18.12744
-250,000 blocks by 2 threads done in 15.23534
 
+OpenMP was used for parallelising the code.
 
+-x-
 
-double check if speedups were linear. 
+Parallelism took place

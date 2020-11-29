@@ -19,21 +19,10 @@ int ROUNDS{0};
  */
 std::pair<unsigned int **, unsigned int **>  init(const std::vector<unsigned int> &k, const std::vector<unsigned int> &m, const std::string &type) {
 
-    if (type=="128") {
-        N = 4;
-        ROUNDS = 10;
-    }
-    else if(type=="192"){
-        N = 6;
-        ROUNDS = 12;
-    }
-    else if(type=="256"){
-        N = 8;
-        ROUNDS = 14;
-    }
-    else{
-       throw std::invalid_argument{"AES-Encryption type must be 128, 192 or 256"};
-    }
+   
+    N = 4;
+    ROUNDS = 10;
+   
 
     // allocate key and msg
 

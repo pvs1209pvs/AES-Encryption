@@ -77,7 +77,7 @@ std::vector<std::vector<unsigned int>> fread_lines(const std::string &filename) 
 bool fwrite_lines(const std::string &fname, std::string encrypted) {
 
     int sucessFlag = 0;
-    std::ofstream fileWriter(fname, std::ios::app);
+    std::ofstream fileWriter(fname);
 
     if (fileWriter.is_open()) {
         fileWriter << encrypted;
