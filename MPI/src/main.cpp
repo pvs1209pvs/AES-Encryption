@@ -56,41 +56,43 @@ int main(int argc, char* argv[]) {
     char buffer[num_blocks];
     int buff_sz;
 
-
     if (my_rank != 0){
 
         buff_sz = 0;
 
-        unsigned int * temp = new unsigned int[16];
-        int t = 0;
-        //std::cout << "start " << (my_rank-1)*chunk_size*16 - my_rank*chunk_size*16 << std::endl;
+        std::vector<unsigned int> linear_text{};
+
         for (int i = (my_rank-1)*chunk_size*16; i < my_rank*chunk_size*16 ; ++i) {
-            
-            temp[t++] = text[i];
+
+            linear_text.push_back(text[i]);
             
             // one chunk is ready
-            if(t%16==0){
+            if(linear_text.size()%16==0){
 
-                t = 0;
+                std::pair<unsigned int **, unsigned int **> key_msg = init(key, linear_text, "128");
+                std::string e = hex_mtrx_to_str(encrypt(key_msg.first, key_msg.second));
 
-                std::vector<unsigned int> linear_text{};
-                // unsigned int ** temp_linear = (unsigned int **)malloc(sizeof(unsigned int *)*4);
-                // for (int i = 0; i < 4; i++){
-                //     temp_linear[i] = (unsigned int *)malloc(sizeof(unsigned int)*4);
-                // }
-                
-                for (int i = 0; i < 16; i++){
-                        linear_text.push_back(temp[t++]);
+                for (int i = 0; i < e.size(); ++i){
+                    buffer[buff_sz++] = e[i];
+                }
+
+                for (int i = e.size(); i < 32; i++){
+                    buffer[buff_sz++] = ' ';
                 }
                 
-                std::pair<unsigned int **, unsigned int **> key_msg = init(key, linear_text, "128");
-                std::cout << hex_mtrx_to_str(encrypt(key_msg.first, key_msg.second)) << std::endl;
-
-                t = 0;
+                
             }
-           
-            buffer[buff_sz++] = text[i];
+
         }
+        
+        std::cout << my_rank << " Send" << std::endl;
+        for (int i = 0; i < buff_sz; i++){
+            std::cout << buffer[i];
+        }
+        std::cout << std::endl;
+        
+        linear_text.clear();
+    
 
         MPI_Send(buffer, 1, BLOCK, 0, 0, MPI_COMM_WORLD);
     }
@@ -99,11 +101,11 @@ int main(int argc, char* argv[]) {
         for (int i = 1; i < comm_sz; i++) {
             MPI_Recv(buffer, 1, BLOCK, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             
-            // std::cout << "Recv " << i << std::endl;
-            // for (int i = 0; i < chunk_size*16; ++i){
-            //     std::cout << buffer[i];
-            // }
-            // std::cout << std::endl;
+            std::cout << i << " Recv " << std::endl;
+            for (int i = 0; i < 32; ++i){
+                std::cout << buffer[i];
+            }
+            std::cout << std::endl;
 
         }
 
