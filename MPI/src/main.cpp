@@ -27,6 +27,8 @@ int main(int argc, char* argv[]) {
     std::vector<std::vector<unsigned int>> input_text = fread_lines("../src/random_message.txt");
     std::vector<unsigned int> key = fread_chars("../src/key.txt");
  
+
+    // in 1d form
     unsigned int text[16*input_text.size()];
 
     int text_sz = 0;
@@ -46,13 +48,17 @@ int main(int argc, char* argv[]) {
 
     MPI_Datatype BLOCK;
 
-    int chunk_size = TOTAL_BLOCKS/3;
-    int num_blocks = 32*(chunk_size); // 32 is max len of a block. block array is number of block to be worked upon by each process.
 
-    
+    // chunksize given to each thread.
+    int chunk_size = TOTAL_BLOCKS/4;
+    // total number of chunk size.
+    int num_blocks = 32*(chunk_size); // 32 is max len of a block. num_blocks is number of block to be worked upon by each process.
+
+    // our derived data type that is array of chars.
     MPI_Type_contiguous(num_blocks, MPI_CHAR, &BLOCK);
     MPI_Type_commit(&BLOCK);
 
+    // buffer for sending and receving.
     char buffer[num_blocks];
     int buff_sz;
 
@@ -62,18 +68,24 @@ int main(int argc, char* argv[]) {
 
         buff_sz = 0;
 
-        std::vector<unsigned int> linear_text{};
+        // text = multiple inner block
+        // inner block = block of text to be encrypted by AES
+        std::vector<unsigned int> inner_block{};
 
+        // load distribution amongst processes
+        // start of that process' sub array, end of that sub array, increment
         for (int i = (my_rank-1)*chunk_size*16; i < my_rank*chunk_size*16 ; ++i) {
 
-            linear_text.push_back(text[i]);
+            inner_block.push_back(text[i]);
             
-            // one chunk is ready
-            if(linear_text.size()%16==0){
+            // one chunk is ready, extract all blocks
+            if(inner_block.size()%16==0){
 
-                std::pair<unsigned int **, unsigned int **> key_msg = init(key, linear_text, "128");
+                // encryption
+                std::pair<unsigned int **, unsigned int **> key_msg = init(key, inner_block, "128");
                 std::string e = hex_mtrx_to_str(encrypt(key_msg.first, key_msg.second));
 
+                // added encrypted text to buffer
                 for (int i = 0; i < e.size(); ++i){
                     buffer[buff_sz++] = e[i];
                 }
@@ -83,6 +95,7 @@ int main(int argc, char* argv[]) {
 
         }
 
+        // add padding
         while(buff_sz < chunk_size*32){
             buffer[buff_sz++] = ' ';
         }
@@ -93,7 +106,8 @@ int main(int argc, char* argv[]) {
         // }
         // std::cout << std::endl;
         
-        linear_text.clear();
+        // to save space
+        inner_block.clear();
     
         MPI_Send(buffer, 1, BLOCK, 0, 0, MPI_COMM_WORLD);
     }

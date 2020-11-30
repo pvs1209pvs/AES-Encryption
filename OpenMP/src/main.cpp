@@ -27,15 +27,6 @@ int main(int argc, char *argv[])
     std::vector<std::vector<unsigned int>> input_text = fread_lines("../src/random_message.txt");
     std::vector<unsigned int> key = fread_chars("../src/key.txt");
 
-    std::cout << input_text[0].size() << std::endl;
-    
-    for (size_t i = 0; i < input_text.size(); i++) {
-      for (size_t j = 0; j < input_text.at(i).size(); j++) {
-          std::cout << std::hex << input_text.at(i).at(j) << " ";
-      }
-      std::cout << std::endl;
-    }
-
     // Save encrypted blocks in this vector
     std::vector<unsigned int **> encrypted{};
     encrypted.reserve(NUM_BLOCKS);
