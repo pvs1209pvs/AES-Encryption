@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "Configuration.h"
 
 extern int N;
 extern int ROUNDS;
