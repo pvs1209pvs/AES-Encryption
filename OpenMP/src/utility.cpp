@@ -50,7 +50,7 @@ std::vector<std::vector<unsigned int>> fread_lines(const std::string &filename) 
         while (!infile.eof()) {
             unsigned int r = (unsigned int) infile.get();
             text.push_back(r);
-            if (text.size() == 128) {
+            if (text.size() == 16) {
                 block_text.push_back(text);
                 text.clear();
             }
@@ -99,12 +99,9 @@ void fwrite_random(const int &bit_blocks, const int &block_size) {
     if (fwriter.is_open()) {
 
         srand(time(NULL));
-
+    
         for (int i = 1; i <= bit_blocks * block_size; ++i) {
             fwriter << (char) (rand() % 94 + 32);
-            if (i % bit_blocks == 0) {
-              //  fwriter << '\n';
-            }
         }
 
         fwriter.close();
@@ -187,7 +184,7 @@ void set_col(unsigned int **&state, unsigned int *source_col, int col_number) {
  * @param input Input state matrix.
  * @return String representation of the state matrix.
  */
-std::string hex_mtrx_to_string(unsigned int **input) {
+std::string hex_mtrx_to_str(unsigned int **input) {
 
     if (input == nullptr) {
         return "nullstate";

@@ -1,6 +1,6 @@
 OpenMP with 400,000 blocks of 128
 
-1 Thread	33.977
+1 Thread	34.0131
 2 Threads	18.3642
 3 Threads	14.2919
 4 Threads	10.9419

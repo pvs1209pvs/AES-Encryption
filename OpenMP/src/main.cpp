@@ -20,19 +20,29 @@ int main(int argc, char *argv[])
     const int NUM_THREADS = std::stoi(argv[2]);
 
     // Create a text file
-    fwrite_random(std::stoi("128"), NUM_BLOCKS);
+    fwrite_random(std::stoi("128")/8, NUM_BLOCKS);
 
-    // REad text and key
+
+    // Read text and key
     std::vector<std::vector<unsigned int>> input_text = fread_lines("../src/random_message.txt");
     std::vector<unsigned int> key = fread_chars("../src/key.txt");
+
+    std::cout << input_text[0].size() << std::endl;
+    
+    for (size_t i = 0; i < input_text.size(); i++) {
+      for (size_t j = 0; j < input_text.at(i).size(); j++) {
+          std::cout << std::hex << input_text.at(i).at(j) << " ";
+      }
+      std::cout << std::endl;
+    }
 
     // Save encrypted blocks in this vector
     std::vector<unsigned int **> encrypted{};
     encrypted.reserve(NUM_BLOCKS);
 
-    for (int i = 0; i < NUM_BLOCKS; i++) 
+    for (int i = 0; i < NUM_BLOCKS; i++)
         encrypted.push_back(nullptr);
-    
+
 
     // Encryption
 
@@ -40,7 +50,7 @@ int main(int argc, char *argv[])
 
     #pragma omp parallel for num_threads(NUM_THREADS)
     for (int i = 0; i < input_text.size(); i++){
-        std::pair<unsigned int **, unsigned int **> key_msg = init(key, input_text.at(i), "!28");
+        std::pair<unsigned int **, unsigned int **> key_msg = init(key, input_text.at(i), "128");
         encrypted[i] = encrypt(key_msg.first, key_msg.second);
     }
 
@@ -52,7 +62,7 @@ int main(int argc, char *argv[])
 
     std::string e_str = "";
     for (int i = 0; i < NUM_BLOCKS; i++)
-        e_str += hex_mtrx_to_string(encrypted[i]);
+        e_str += hex_mtrx_to_str(encrypted[i]);
     fwrite_lines("../src/encrypted.txt", e_str);
 
     return 0;

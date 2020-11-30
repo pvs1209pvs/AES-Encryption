@@ -50,7 +50,7 @@ std::vector<std::vector<unsigned int>> fread_lines(const std::string &filename) 
         while (!infile.eof()) {
             unsigned int r = (unsigned int) infile.get();
             text.push_back(r);
-            if (text.size() == 128) {
+            if (text.size() == 16) {
                 block_text.push_back(text);
                 text.clear();
             }
@@ -187,7 +187,7 @@ void set_col(unsigned int **&state, unsigned int *source_col, int col_number) {
  * @param input Input state matrix.
  * @return String representation of the state matrix.
  */
-std::string hex_mtrx_to_string(unsigned int **input) {
+std::string hex_mtrx_to_str(unsigned int **input) {
 
     if (input == nullptr) {
         return "nullstate";
