@@ -19,7 +19,7 @@
 int main(int argc, char* argv[]) {
     
     const std::string AES_TYPE = "128";
-    const int TOTAL_BLOCKS = 4;
+    const int TOTAL_BLOCKS = 12;
 
     // Create a text file, read text and key
     fwrite_random(std::stoi(AES_TYPE)/8, TOTAL_BLOCKS);
@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
 
     MPI_Datatype BLOCK;
 
-    int chunk_size = TOTAL_BLOCKS/4;
+    int chunk_size = TOTAL_BLOCKS/3;
     int num_blocks = 32*(chunk_size); // 32 is max len of a block. block array is number of block to be worked upon by each process.
 
     
@@ -55,6 +55,8 @@ int main(int argc, char* argv[]) {
 
     char buffer[num_blocks];
     int buff_sz;
+
+    double s = MPI_Wtime();
 
     if (my_rank != 0){
 
@@ -76,24 +78,23 @@ int main(int argc, char* argv[]) {
                     buffer[buff_sz++] = e[i];
                 }
 
-                for (int i = e.size(); i < 32; i++){
-                    buffer[buff_sz++] = ' ';
-                }
-                
                 
             }
 
         }
-        
-        std::cout << my_rank << " Send" << std::endl;
-        for (int i = 0; i < buff_sz; i++){
-            std::cout << buffer[i];
+
+        while(buff_sz < chunk_size*32){
+            buffer[buff_sz++] = ' ';
         }
-        std::cout << std::endl;
+
+        //std::cout << my_rank << " Send" << std::endl;
+        // for (int i = 0; i < buff_sz; i++){
+        //     std::cout << buffer[i];
+        // }
+        // std::cout << std::endl;
         
         linear_text.clear();
     
-
         MPI_Send(buffer, 1, BLOCK, 0, 0, MPI_COMM_WORLD);
     }
     else{
@@ -101,7 +102,7 @@ int main(int argc, char* argv[]) {
         for (int i = 1; i < comm_sz; i++) {
             MPI_Recv(buffer, 1, BLOCK, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             
-            std::cout << i << " Recv " << std::endl;
+            //std::cout << i << " Recv " << std::endl;
             for (int i = 0; i < 32; ++i){
                 std::cout << buffer[i];
             }
@@ -112,8 +113,12 @@ int main(int argc, char* argv[]) {
         fflush(stdout);
     }
 
+    double end = MPI_Wtime();
 
     MPI_Finalize();
+
+    if(my_rank == 0)
+        std::cout << end-s << std::endl;
 
     return 0;
 
