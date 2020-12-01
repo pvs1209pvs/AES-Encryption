@@ -8,6 +8,12 @@
 #include "utility.h"
 
 /**
+ * TODO: each process' answer is not long enough, fix that.
+ * TODO: make master process combine the result of all the slave processes.
+ * TODO: make the code work with any number of processes.
+ */
+
+/**
  * OpenMPI
  *
  * Group Members are:
@@ -19,24 +25,13 @@
 int main(int argc, char* argv[]) {
     
     const std::string AES_TYPE = "128";
-    const int TOTAL_BLOCKS = 12;
+    const int TOTAL_BLOCKS = 80000;
 
     // Create a text file, read text and key
     fwrite_random(std::stoi(AES_TYPE)/8, TOTAL_BLOCKS);
 
-    std::vector<std::vector<unsigned int>> input_text = fread_lines("../src/random_message.txt");
+    unsigned int * text = fread_lines("../src/random_message.txt");
     std::vector<unsigned int> key = fread_chars("../src/key.txt");
- 
-
-    // in 1d form
-    unsigned int text[16*input_text.size()];
-
-    int text_sz = 0;
-    for (size_t i = 0; i < input_text.size(); i++) {
-        for (size_t j = 0; j < input_text.at(i).size(); j++) {
-            text[text_sz++] =  input_text.at(i).at(j);
-        }
-    }
 
     int comm_sz;
     int my_rank;
@@ -48,13 +43,9 @@ int main(int argc, char* argv[]) {
 
     MPI_Datatype BLOCK;
 
-
-    // chunksize given to each thread.
     int chunk_size = TOTAL_BLOCKS/4;
-    // total number of chunk size.
     int num_blocks = 32*(chunk_size); // 32 is max len of a block. num_blocks is number of block to be worked upon by each process.
 
-    // our derived data type that is array of chars.
     MPI_Type_contiguous(num_blocks, MPI_CHAR, &BLOCK);
     MPI_Type_commit(&BLOCK);
 
@@ -62,35 +53,29 @@ int main(int argc, char* argv[]) {
     char buffer[num_blocks];
     int buff_sz;
 
+    std::vector<char[num_blocks]> encrypted{};
+
     double s = MPI_Wtime();
 
     if (my_rank != 0){
 
         buff_sz = 0;
 
-        // text = multiple inner block
-        // inner block = block of text to be encrypted by AES
         std::vector<unsigned int> inner_block{};
 
-        // load distribution amongst processes
-        // start of that process' sub array, end of that sub array, increment
         for (int i = (my_rank-1)*chunk_size*16; i < my_rank*chunk_size*16 ; ++i) {
 
             inner_block.push_back(text[i]);
             
-            // one chunk is ready, extract all blocks
             if(inner_block.size()%16==0){
 
-                // encryption
                 std::pair<unsigned int **, unsigned int **> key_msg = init(key, inner_block, "128");
                 std::string e = hex_mtrx_to_str(encrypt(key_msg.first, key_msg.second));
 
-                // added encrypted text to buffer
                 for (int i = 0; i < e.size(); ++i){
                     buffer[buff_sz++] = e[i];
                 }
-
-                
+ 
             }
 
         }
@@ -99,6 +84,7 @@ int main(int argc, char* argv[]) {
         while(buff_sz < chunk_size*32){
             buffer[buff_sz++] = ' ';
         }
+        std::cout << buff_sz << std::endl;
 
         //std::cout << my_rank << " Send" << std::endl;
         // for (int i = 0; i < buff_sz; i++){

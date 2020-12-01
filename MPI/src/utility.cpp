@@ -39,31 +39,41 @@ std::vector<unsigned int> fread_chars(const std::string &filename) {
 
 }
 
-std::vector<std::vector<unsigned int>> fread_lines(const std::string &filename) {
+unsigned int * fread_lines(const std::string &filename) {
 
-    std::vector<unsigned int> text;
-    std::vector<std::vector<unsigned int>> block_text;
+    int size = -1;
+
     std::ifstream infile{filename, std::ios::in};
 
     if (infile.is_open()) {
-
         while (!infile.eof()) {
-            unsigned int r = (unsigned int) infile.get();
-            text.push_back(r);
-            if (text.size() == 16) {
-                block_text.push_back(text);
-                text.clear();
-            }
+            unsigned int r = (unsigned int) infile.get(); 
+            size++;
         }
-
         infile.close();
-
     } else {
         std::cout << "couldn't open file" << std::endl;
         exit(1);
     }
 
-    return block_text;
+    unsigned int * chars = (unsigned int *)malloc(sizeof(unsigned int)*size);
+    int p = 0;
+
+    infile = std::ifstream{filename, std::ios::in};
+
+     if (infile.is_open()) {
+        while (!infile.eof()) {
+            unsigned int r = (unsigned int) infile.get(); 
+            chars[p++] = r;
+        }
+        infile.close();
+    } else {
+        std::cout << "couldn't open file" << std::endl;
+        exit(1);
+    }
+
+
+    return chars;
 
 }
 
