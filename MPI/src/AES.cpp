@@ -304,7 +304,7 @@ unsigned int **round(unsigned int **state, unsigned int **round_key) {
  *
  * @return encrypted text.
  */
-unsigned int *encrypt(unsigned int ** key, unsigned int ** msg) {
+unsigned int **encrypt(unsigned int ** key, unsigned int ** msg) {
 
     // key expansion
     std::vector<unsigned int **> key_schedule = key_expansion(key);
@@ -323,19 +323,19 @@ unsigned int *encrypt(unsigned int ** key, unsigned int ** msg) {
     encrypt_state = add_round_key(encrypt_state, key_schedule.at(ROUNDS));
 
 
-    unsigned int * e_one_d = (unsigned int *)malloc(sizeof(unsigned int)*16);
+    // unsigned int * e_one_d = (unsigned int *)malloc(sizeof(unsigned int)*16);
 
-    int e = 0;
+    // int e = 0;
 
-    for (int i = 0; i < 4; i++){
-        for (int j = 0; j < 4; j++){
-            e_one_d[e++] = encrypt_state[i][j];
-        }
+    // for (int i = 0; i < 4; i++){
+    //     for (int j = 0; j < 4; j++){
+    //         e_one_d[e++] = encrypt_state[i][j];
+    //     }
         
-    }
+    // }
     
     
     // encrypted text
-    return e_one_d;
+    return encrypt_state;
 
 }
