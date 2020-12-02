@@ -31,4 +31,4 @@ unsigned int **add_round_key(const unsigned int **const &a, const unsigned int *
 
 unsigned int **round(unsigned int **state, unsigned int **round_key);
 
-unsigned int **encrypt(unsigned int ** key, unsigned int ** msg);
+unsigned int *encrypt(unsigned int ** key, unsigned int ** msg);

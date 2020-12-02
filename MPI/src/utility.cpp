@@ -39,7 +39,7 @@ std::vector<unsigned int> fread_chars(const std::string &filename) {
 
 }
 
-unsigned int * fread_lines(const std::string &filename) {
+unsigned int ** fread_lines(const std::string &filename) {
 
     int size = -1;
 
@@ -56,16 +56,24 @@ unsigned int * fread_lines(const std::string &filename) {
         exit(1);
     }
 
-    unsigned int * chars = (unsigned int *)malloc(sizeof(unsigned int)*size);
+    unsigned int ** chars = (unsigned int **)malloc(sizeof(unsigned int*)*size/16);
+    for (int i = 0; i < size/16; i++){
+        chars[i] = (unsigned int *)malloc(sizeof(unsigned int)*16);
+    }
+    
     int p = 0;
 
     infile = std::ifstream{filename, std::ios::in};
 
      if (infile.is_open()) {
-        while (!infile.eof()) {
-            unsigned int r = (unsigned int) infile.get(); 
-            chars[p++] = r;
+        
+        for (int i = 0; i < size/16; i++){
+            for (int j = 0; j < 16; j++){
+                chars[i][j] = (unsigned int)infile.get();
+            }
+            
         }
+
         infile.close();
     } else {
         std::cout << "couldn't open file" << std::endl;

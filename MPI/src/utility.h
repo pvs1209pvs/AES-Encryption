@@ -5,7 +5,7 @@
 
 std::vector<unsigned int> fread_chars(const std::string &filename);
 
-unsigned int * fread_lines(const std::string &filename);
+unsigned int ** fread_lines(const std::string &filename);
 
 // TODO write the output in char representation or in 64 base.
 bool fwrite_lines(const std::string &fname, std::string encrypted);
