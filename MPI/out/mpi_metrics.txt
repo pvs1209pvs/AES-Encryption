@@ -1,0 +1,6 @@
+OpenMPI with 400,000 blocks of 128
+
+1 Process	39.4581
+2 Processes	20.4312
+3 Processes	14.7917
+4 Processes	14.1527
